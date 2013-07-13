@@ -222,7 +222,7 @@ function show_applicable_list(menupopup) {
 function toggle_rule(rule_id) {
   // toggle the rule state
   var rs = HTTPSEverywhere.https_rules.rulesetsByID[rule_id];
-  // var GITCommitID = "HEAD";
+  var GITID = rs.GITCommitID;
   rs.toggle();
 
   var prefs = HTTPSEverywhere.get_prefs();
@@ -234,15 +234,11 @@ function toggle_rule(rule_id) {
 	  .getMostRecentWindow('navigator:browser');
 
   if (report_global && !rs.active) {
-	  alert('auto-submit: '+rs.xmlName);
-//	  aWin.openDialog("chrome://https-everywhere/content/fetch-source.xul", 
-//			  rs.xmlName, "chrome,centerscreen",
-//			  {xmlName: rs.xmlName, GITCommitID: GITID});
+	  alert('auto-submitted a bug report for: '+rs.xmlName);
   } else if (report_specific && !rs.active) {
-	  alert('ask user if they would like to submit '+rs.xmlName);
-//     	  aWin.openDialog("chrome://https-everywhere/content/fetch-source.xul", 
-//			  rs.xmlName, "chrome,centerscreen",
-//			  {xmlName: rs.xmlName, GITCommitID: GITID});
+     	  aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
+			  rs.xmlName, "chrome,centerscreen",
+			  {xmlName: rs.xmlName, GITCommitID: GITID});
   }
 
   var domWin = content.document.defaultView.top;
