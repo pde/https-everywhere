@@ -1,5 +1,7 @@
-pref("extensions.https_everywhere.LogLevel", 5);
+pref("extensions.https_everywhere.LogLevel", 1); //verbose for debugging 
 pref("extensions.https_everywhere.globalEnabled",true);
+pref("extensions.https_everywhere.report_disabled_rules_global",false);
+pref("extensions.https_everywhere.report_disabled_rules_specific",true);
 
 // SSl Observatory preferences
 pref("extensions.https_everywhere._observatory.enabled",false);
