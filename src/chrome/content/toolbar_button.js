@@ -226,16 +226,15 @@ function toggle_rule(rule_id) {
   rs.toggle();
 
   var prefs = HTTPSEverywhere.get_prefs();
-  var report_global = prefs.getBoolPref("report_disabled_rules_global");
-  var report_specific = prefs.getBoolPref("report_disabled_rules_specific");
+  var report = prefs.getIntPref("report_disabled_rules_global");
 
   var aWin = CC['@mozilla.org/appshell/window-mediator;1']
 	  .getService(CI.nsIWindowMediator)
 	  .getMostRecentWindow('navigator:browser');
 
-  if (report_global && !rs.active) {
+  if ((report === 2) && !rs.active) {
 	  alert('auto-submitted a bug report for: '+rs.xmlName);
-  } else if (report_specific && !rs.active) {
+  } else if ((report === 1) && !rs.active) {
      	  aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
 			  rs.xmlName, "chrome,centerscreen",
 			  {xmlName: rs.xmlName, GITCommitID: GITID});
