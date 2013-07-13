@@ -25,7 +25,7 @@ function disable_all() {
 
 // Reset all rules to their default state.
 function reset_defaults() {
-  https_everywhere.https_rules.resetRulesetsToDefaults()
+  https_everywhere.https_rules.resetRulesetsToDefaults();
   treeView.treebox.invalidate();
 }
 
