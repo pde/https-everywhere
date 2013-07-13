@@ -221,22 +221,28 @@ function show_applicable_list(menupopup) {
 
 function toggle_rule(rule_id) {
   // toggle the rule state
-  HTTPSEverywhere.https_rules.rulesetsByID[rule_id].toggle();
+  var rs = HTTPSEverywhere.https_rules.rulesetsByID[rule_id];
+  // var GITCommitID = "HEAD";
+  rs.toggle();
+
   var prefs = HTTPSEverywhere.get_prefs();
   var report_global = prefs.getBoolPref("report_disabled_rules_global");
   var report_specific = prefs.getBoolPref("report_disabled_rules_specific");
 
-  if (report_global) {
-    alert('will automatically report this rule');
-//  probably need something like
-//  var aWin = CC['@mozilla.org/appshell/window-mediator;1']
-//  .getService(CI.nsIWindowMediator) 
-//  .getMostRecentWindow('navigator:browser');
-//  aWin.openDialog("chrome://https-everywhere/content/fetch-source.xul",
-//                   rs.xmlName, "chrome,centerscreen", 
-//                   {xmlName: rs.xmlName, GITCommitID: GITID} );
-  } else if (report_specific) {
-    alert('will ask user whether to report this rule');
+  var aWin = CC['@mozilla.org/appshell/window-mediator;1']
+	  .getService(CI.nsIWindowMediator)
+	  .getMostRecentWindow('navigator:browser');
+
+  if (report_global && !rs.active) {
+	  alert('auto-submit: '+rs.xmlName);
+//	  aWin.openDialog("chrome://https-everywhere/content/fetch-source.xul", 
+//			  rs.xmlName, "chrome,centerscreen",
+//			  {xmlName: rs.xmlName, GITCommitID: GITID});
+  } else if (report_specific && !rs.active) {
+	  alert('ask user if they would like to submit '+rs.xmlName);
+//     	  aWin.openDialog("chrome://https-everywhere/content/fetch-source.xul", 
+//			  rs.xmlName, "chrome,centerscreen",
+//			  {xmlName: rs.xmlName, GITCommitID: GITID});
   }
 
   var domWin = content.document.defaultView.top;
