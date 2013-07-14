@@ -233,7 +233,7 @@ function toggle_rule(rule_id) {
 	  .getMostRecentWindow('navigator:browser');
 
   if ((report === 2) && !rs.active) {
-	  alert('auto-submitted a bug report for: '+rs.xmlName);
+	  httpsEverywhere.reportRule.submitReport(rs.xmlName, GITID);
   } else if ((report === 1) && !rs.active) {
      	  aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
 			  rs.xmlName, "chrome,centerscreen",

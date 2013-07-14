@@ -14,16 +14,16 @@
 // global namespace pollution is avoided, although technically not required for
 // windows created by add-on.
 // See: https://developer.mozilla.org/en-US/docs/Security_best_practices_in_extensions#Code_wrapping
-VERB=1;
-DBUG=2;
-INFO=3;
-NOTE=4;
-WARN=5;
+var VERB=1;
+var DBUG=2;
+var INFO=3;
+var NOTE=4;
+var WARN=5;
 
-CC = Components.classes;
-CI = Components.interfaces;
+var CC = Components.classes;
+var CI = Components.interfaces;
 
-HTTPSEverywhere = CC["@eff.org/https-everywhere;1"]
+var HTTPSEverywhere = CC["@eff.org/https-everywhere;1"]
                       .getService(Components.interfaces.nsISupports)
                       .wrappedJSObject;
 
@@ -41,6 +41,7 @@ httpsEverywhere.reportRule = {
 
   init: function() {
     var rr = httpsEverywhere.reportRule;
+    // get arguments for submitReport from window if necessary
     if("arguments" in window && window.arguments.length > 0) {
       var rulename = window.arguments[0].xmlName;
       var id = window.arguments[0].GITCommitID; //GIT commit ID
