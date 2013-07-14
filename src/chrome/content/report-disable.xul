@@ -21,12 +21,5 @@
     </commandgroup>
     <button label="Send" tabindex="2" accesskey="y" command="enable" />
     <button label="Do not send" tabindex="3" accesskey="n" command="nope" />
-    <box orient="horizontal">
-        <label id="filename-label" value="&https-everywhere.source.filename;:"/>
-        <label id="filename-text"/>
-    </box>
-    <box orient="horizontal">
-    	<label id="path-label" value="URL:"/>
-    	<label id="path-text"/>
     </box>
 </dialog>
