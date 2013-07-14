@@ -82,13 +82,19 @@ httpsEverywhere.reportRule = {
     var req = CC["@mozilla.org/xmlextras/xmlhttprequest;1"]
                  .createInstance(CI.nsIXMLHttpRequest);
     var submit_host = rr.prefs.getCharPref("report_host");
-    var submit_url = "http://"+submit_host+"/submit_report/submit.py";
+    var submit_url = "https://"+submit_host+"/submit_report/submit.py";
     HTTPSEverywhere.log(DBUG, "report submission URL: "+submit_url);
     req.open("POST", submit_url, true);
+    //send proper header info
     req.setRequestHeader("X-Privacy-Info", "EFF SSL Observatory: https://eff.org/r.22c");
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.setRequestHeader("Content-length", params.length);
     req.setRequestHeader("Connection", "close");
+    // clear headers for privacy
+    req.setRequestHeader("User-Agent", "");
+    req.setRequestHeader("Accept", "");
+    req.setRequestHeader("Accept-Encoding", "");
+    req.setRequestHeader("Accept-Charset", "");
     return req;
   },
 
