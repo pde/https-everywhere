@@ -85,8 +85,8 @@ httpsEverywhere.reportRule = {
     var rr = httpsEverywhere.reportRule;
     var req = CC["@mozilla.org/xmlextras/xmlhttprequest;1"]
                     .createInstance(CI.nsIXMLHttpRequest);
-    var submit_url = "https://" + rr.submit_host + "/submit_report";
-    req.open("POST", rr.submit_url, true);
+    var submit_url = "https://" + rr.submit_host + "/submit_report/submit.py";
+    req.open("POST", submit_url, true);
     return req;
   },
 
