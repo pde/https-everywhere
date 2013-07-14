@@ -107,6 +107,12 @@ httpsEverywhere.reportRule = {
   submitFailed: function() {
     HTTPSEverywhere.log(WARN, "submit failed");
   },
+
+  setFilenameText: function () {
+    var rulename = window.arguments[0].xmlName;
+    var comment_label = document.getElementById("comment-label");
+    comment_label.value += rulename;
+  },
 };
 
-
+window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);

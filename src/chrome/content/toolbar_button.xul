@@ -8,7 +8,6 @@
 
 <overlay id="https-everywhere-button-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/x-javascript" src="chrome://https-everywhere/content/toolbar_button.js"/>
-  <script type="application/x-javascript" src="chrome://https-everywhere/content/report-disable.js"/>
   
     <stringbundleset id="stringbundleset">
         <stringbundle id="HttpsEverywhereStrings"
