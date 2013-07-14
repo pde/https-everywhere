@@ -235,7 +235,6 @@ function toggle_rule(rule_id) {
   if ((report === 2) && !rs.active) {
 	  alert('auto-submitted a bug report for: '+rs.xmlName);
   } else if ((report === 1) && !rs.active) {
-	  alert('preference value is 1');
      	  aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
 			  rs.xmlName, "chrome,centerscreen",
 			  {xmlName: rs.xmlName, GITCommitID: GITID});

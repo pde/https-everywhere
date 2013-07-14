@@ -21,5 +21,4 @@
     </commandgroup>
     <button label="Send" tabindex="2" accesskey="y" command="enable" />
     <button label="Do not send" tabindex="3" accesskey="n" command="nope" />
-    </box>
 </dialog>
