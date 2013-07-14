@@ -9,16 +9,12 @@
         title="&https-everywhere.prefs.view_xml_source;"
         persist="screenX screenY width height"
         style="height:80%; resize:both;"
-        buttons="accept"
-        height="600"
-        width="650">
+        buttons="accept,cancel"
+        height="400"
+	width="300"
+	ondialogaccept="httpsEverywhere.reportRule.init(); self.close()"
+	ondialogcancel="self.close()">
         
     
     <script type="application/x-javascript" src="report-disable.js"/>
-    <commandgroup>
-	<command id="enable" oncommand="httpsEverywhere.reportRule.init(); self.close()" />
-	<command id="nope" oncommand="self.close()" />
-    </commandgroup>
-    <button label="Send" tabindex="2" accesskey="y" command="enable" />
-    <button label="Do not send" tabindex="3" accesskey="n" command="nope" />
 </dialog>
