@@ -45,18 +45,20 @@ httpsEverywhere.reportRule = {
     if("arguments" in window && window.arguments.length > 0) {
       var rulename = window.arguments[0].xmlName;
       var id = window.arguments[0].GITCommitID; //GIT commit ID
+      var comment = document.getElementById("comment").value;
     } else {
       // Should never happen
       throw 'Invalid window arguments.';
     }
-    rr.submitReport(rulename,id);
+    rr.submitReport(rulename,id,comment);
   },
 
-  submitReport: function(rulename, commit_id) {
+  submitReport: function(rulename, commit_id, comment) {
     var rr = httpsEverywhere.reportRule;
     var reqParams = [];
     reqParams.push("rulename="+rulename);
     reqParams.push("commit_id="+commit_id);
+    reqParams.push("comment="+comment);
     //TODO: add httpse version, browser
     var params = reqParams.join("&");
     var req = rr.buildRequest(params);

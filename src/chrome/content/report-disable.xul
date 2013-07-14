@@ -15,6 +15,7 @@
 	ondialogaccept="httpsEverywhere.reportRule.init(); self.close()"
 	ondialogcancel="self.close()">
         
-    
     <script type="application/x-javascript" src="report-disable.js"/>
+    <label control="comment-label" value="Report a problem withis rule" />
+    <textbox id="comment" multiline="true" spellcheck="true"/>
 </dialog>
