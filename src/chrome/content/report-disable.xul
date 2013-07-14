@@ -15,6 +15,12 @@
         
     
     <script type="application/x-javascript" src="report-disable.js"/>
+    <commandgroup>
+	<command id="enable" oncommand="httpsEverywhere.reportRule.init(); self.close()" />
+	<command id="nope" oncommand="self.close()" />
+    </commandgroup>
+    <button label="Send" tabindex="2" accesskey="y" command="enable" />
+    <button label="Do not send" tabindex="3" accesskey="n" command="nope" />
     <box orient="horizontal">
         <label id="filename-label" value="&https-everywhere.source.filename;:"/>
         <label id="filename-text"/>
@@ -23,7 +29,4 @@
     	<label id="path-label" value="URL:"/>
     	<label id="path-text"/>
     </box>
-    <separator class="thin"/>
-    <textbox id="source-text" multiline="true" readonly="true" value="&https-everywhere.source.downloading;..."/>
-    <label id="failure-label" hidden="true" value="&https-everywhere.source.unable_to_download;"/>
 </dialog>
