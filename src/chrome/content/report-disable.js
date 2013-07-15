@@ -53,14 +53,59 @@ httpsEverywhere.reportRule = {
     rr.submitReport(rulename,id,comment);
   },
 
+  getSysInfo: function(params) {
+    // https://developer.mozilla.org/en-US/docs/Code_snippets/Miscellaneous#System_info
+    try {
+      var osString = CC["@mozilla.org/xre/app-info;1"]
+                        .getService(CI.nsIXULRuntime).OS;
+    } catch (ex) {
+    // needed for Seamonkey 2.0
+      var osString = CC["@mozilla.org/network/protocol;1?name=http"]
+                         .getService(CI.nsIHttpProtocolHandler).oscpu;
+    }
+    params.push("os="+osString);
+    var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
+    params.push("app_name="+appInfo.name); // ex: firefox
+    params.push("app_version="+appInfo.version); // ex: 2.0.0.1
+    var req_len = params.length+1; //awkward way to know when async call is done
+    try {
+      // Firefox 4 and later; Mozilla 2 and later
+      Components.utils.import("resource://gre/modules/AddonManager.jsm");
+      AddonManager.getAddonByID("https-everywhere@eff.org", function(addon) {
+        params.push("ext_version="+addon.version);
+      });
+    } catch (ex) {
+      // Firefox 3.6 and before; Mozilla 1.9.2 and before
+      var em = CC["@mozilla.org/extensions/manager;1"].getService(CI.nsIExtensionManager);
+      var addon = em.getItemForID("https-everywhere@eff.org");
+      params.push("ext_version="+addon.version);
+    }
+    while (params.length < req_len) {
+      continue;
+   //   if (params.length == req_len) {
+   //     break;
+   //   }
+    }
+  },
+
+  waitForParams: function(params, callback) {
+    var rr = httpsEverywhere.reportRule;
+    function gotParams() {
+      callback(params);
+    }
+    setTimeout(gotParams, 3000);
+  },
+
   submitReport: function(rulename, commit_id, comment) {
     var rr = httpsEverywhere.reportRule;
     var reqParams = [];
     reqParams.push("rulename="+rulename);
     reqParams.push("commit_id="+commit_id);
     reqParams.push("comment="+comment);
-    //TODO: add httpse version, browser
-    var params = reqParams.join("&");
+    //rr.getSysInfo(reqParams);
+    //var params = reqParams.join("&");
+    rr.waitForParams(reqParams, rr.getSysInfo);
+    params = reqParams.join("&");
     var req = rr.buildRequest(params);
     HTTPSEverywhere.log(INFO, "Submitting report for "+rulename);
     HTTPSEverywhere.log(DBUG, "submitReport params: "+params);
