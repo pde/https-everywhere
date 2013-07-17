@@ -146,19 +146,24 @@ httpsEverywhere.reportRule = {
    * Handle a submit ruleset failure.
    */
   submitFailed: function() {
-    HTTPSEverywhere.log(WARN, "submit failed");
+    HTTPSEverywhere.log(INFO, "submit failed");
   },
 
-  setFilenameText: function () {
+};
+  
+
+function set_filename_text() {
     var rulename = window.arguments[0].xmlName;
     var dialog_header = document.getElementById("dialog-header");
-    dialog_header.value += rulename;
-  },
-};
+    dialog_header.setAttribute("title", dialog_header.getAttribute("title")+rulename);
+}
 
 function dont_ask_again() {
-    // Don't submit reports
   httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 0);
 }
 
-window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);
+function turn_on() {
+  httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 1);
+}
+
+window.addEventListener("load", set_filename_text, false);

@@ -9,14 +9,13 @@
         title="&https-everywhere.prefs.view_xml_source;"
         persist="screenX screenY width height"
         style="height:80%; resize:both;"
-        buttons="accept,cancel,disclosure"
+        buttons="accept,cancel"
         height="400"
 	width="300"
 	buttonlabelaccept="Send"
 	ondialogaccept="httpsEverywhere.reportRule.init(); self.close()"
-	ondialogcancel="self.close()"
-	ondialogdisclosure="self.alert('info here')" >
-        
+	ondialogcancel="self.close()" >
+	
     <script type="application/x-javascript" src="report-disable.js"/>
     <commandset>
 	    <command id="dont-ask-again" oncommand="dont_ask_again()" />
@@ -31,5 +30,5 @@
     <textbox id="comment" multiline="true" spellcheck="true"/>
     <separator class="thin" />
     <checkbox label="Don't ask again" id="dont-ask"
-	      command="dont-ask=again" style="font-size:1.5em;"/>
+	      command="dont-ask-again" style="font-size:1.5em;"/>
 </dialog>
