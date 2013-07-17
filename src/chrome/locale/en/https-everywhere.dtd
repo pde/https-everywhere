@@ -36,13 +36,13 @@
 
 <!ENTITY https-everywhere.report.title "Report a problem with this rule: ">
 <!ENTITY https-everywhere.report.send "Send report">
+<!ENTITY https-everywhere.report.dont_send "Don't send">
 <!ENTITY https-everywhere.report.paragraph1 "You can help us improve HTTPS Everywhere by sending us an anonymous bug report when a ruleset causes a site to break. We'll review these reports regularly and try to fix these rulesets.">
 <!ENTITY https-everywhere.report.paragraph2 "We collect the following information from these reports: the name of the ruleset, your operating system, your browser version, the version of HTTPS Everywhere you are using, and an optional comment on why the ruleset is broken.">
 <!ENTITY https-everywhere.report.dont_ask_again "Don't ask again">
 <!ENTITY https-everywhere.report.comment "Comment (optional): Why did you disable this rule?">
-<!ENTITY https-everywhere.report.preferences "Choose whether to ask to send bug reports when you disable rules.">
+<!ENTITY https-everywhere.report.preferences "When you disable a ruleset that is causing a site to break, we can create an anonymous bug report to help us fix that ruleset. If you check one of these options, we will ask whether you want to send a bug report each time you disable a rule.">
 <!ENTITY https-everywhere.report.enable "Enable bug reporting">
-
-
+<!ENTITY https-everywhere.report.caption "Automatic bug reporting preferences">
 
 

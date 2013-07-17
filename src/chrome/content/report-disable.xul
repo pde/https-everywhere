@@ -13,6 +13,7 @@
         height="400"
 	width="300"
 	buttonlabelaccept="&https-everywhere.report.send;"
+	buttonlabelcancel="&https-everywhere.report.dont_send;"
 	ondialogaccept="httpsEverywhere.reportRule.init(); self.close()"
 	ondialogcancel="self.close()" >
 	
@@ -22,9 +23,9 @@
     </commandset>
 
     <dialogheader id="dialog-header" title="&https-everywhere.report.title;"/>
-    <label>&https-everywhere.report.paragraph1;</label>
+    <description>&https-everywhere.report.paragraph1;</description>
     <separator class="thin" />
-    <label>&https-everywhere.report.paragraph2;</label>
+    <description>&https-everywhere.report.paragraph2;</description>
     <separator class="thin" />
     <label id="comment-label" control="comment" value="&https-everywhere.report.comment; " />
     <textbox id="comment" multiline="true" spellcheck="true"/>

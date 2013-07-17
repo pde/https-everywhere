@@ -277,7 +277,9 @@ function hide_advanced_report() {
 }
 
 function recursive_set(node, attrib, value) {
-  node.setAttribute(attrib, value);
+  try {
+	  node.setAttribute(attrib, value);
+  } catch(err) {}
   for (var i=0; i<node.childNodes.length; i++)
     recursive_set(node.childNodes[i], attrib, value);
 }

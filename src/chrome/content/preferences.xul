@@ -51,31 +51,34 @@
           <treechildren/>
         </tree>
     </groupbox>
-    <separator class="thin"/>
     <vbox>
-	<hbox>  
-	  <spacer flex="1" />
+      <separator class="thin"/>
+      &https-everywhere.prefs.ruleset_howto;
+      <separator class="thin"/>
+      <label id="ruleset link"
+             value="&https-everywhere.prefs.here_link;"
+    	     style="color: blue; cursor:hand; text-decoration:underline;"
+	     onmouseover="event.target.style.cursor='pointer'"
+	     onmouseout="event.target.style.cursor='default'"
+   	     onclick="window_opener('https://eff.org/https-everywhere/rulesets')"/>.
+    </vbox>
+    <vbox>
+      <hbox>  
+        <spacer flex="1" />
 	  <button label="show advanced" onclick="show_advanced_report()"
 	          id="show-advanced-button" />
 	  <button label="hide advanced" onclick="hide_advanced_report()"
                   id="hide-advanced-button" hidden="true" />
-          <spacer flex="1" />
-        </hbox>	
-	<vbox id="advanced-opts" hidden="true">
-	  <groupbox hidden="true" tooltip="report-tip">
-	    <checkbox label="&https-everywhere.report.enable;" 
-		      id="toggle_report"
-		      command="toggle-report"/>
-          </groupbox>
-	</vbox>
-     <separator class="thin" />
-        &https-everywhere.prefs.ruleset_howto;
-        <separator class="thin"/>
-        <label id="ruleset link"
-          value="&https-everywhere.prefs.here_link;"
-          style="color: blue; cursor:hand; text-decoration:underline;"
-          onmouseover="event.target.style.cursor='pointer'"
-          onmouseout="event.target.style.cursor='default'"
-          onclick="window_opener('https://eff.org/https-everywhere/rulesets')"/>.
+        <spacer flex="1" />
+      </hbox>	
+      <vbox id="advanced-opts" hidden="true">
+        <groupbox hidden="true" tooltip="report-tip">
+	  <caption label="&https-everywhere.report.caption;" />
+	  <description>&https-everywhere.report.preferences;"</description>
+	  <checkbox label="&https-everywhere.report.enable;" 
+		    id="toggle_report"
+		    command="toggle-report"/>
+        </groupbox>
+      </vbox>
     </vbox>
 </dialog>
