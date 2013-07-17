@@ -9,13 +9,27 @@
         title="&https-everywhere.prefs.view_xml_source;"
         persist="screenX screenY width height"
         style="height:80%; resize:both;"
-        buttons="accept,cancel"
+        buttons="accept,cancel,disclosure"
         height="400"
 	width="300"
+	buttonlabelaccept="Send"
 	ondialogaccept="httpsEverywhere.reportRule.init(); self.close()"
-	ondialogcancel="self.close()">
+	ondialogcancel="self.close()"
+	ondialogdisclosure="self.alert('info here')" >
         
     <script type="application/x-javascript" src="report-disable.js"/>
-    <label id="comment-label" control="comment" value="Report a problem with this rule: " />
+    <commandset>
+	    <command id="dont-ask-again" oncommand="dont_ask_again()" />
+    </commandset>
+
+    <dialogheader id="dialog-header" title="Report a problem with this rule: "/>
+    <label>You can help us improve HTTPS Everywhere by sending us an anonymous bug report when a ruleset causes a site to break. We'll review these reports regularly and try to fix these rulesets.</label>
+    <separator class="thin" />
+    <label>We collect the following information from these reports: the name of the ruleset, your operating system, your browser version, the version of HTTPS Everywhere you are using, and an optional comment on why the ruleset is broken.</label>
+    <separator class="thin" />
+    <label id="comment-label" control="comment" value="Comment [optional]: Why did you disable this rule? " />
     <textbox id="comment" multiline="true" spellcheck="true"/>
+    <separator class="thin" />
+    <checkbox label="Don't ask again" id="dont-ask"
+	      command="dont-ask=again" style="font-size:1.5em;"/>
 </dialog>

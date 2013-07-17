@@ -14,14 +14,14 @@
 // global namespace pollution is avoided, although technically not required for
 // windows created by add-on.
 // See: https://developer.mozilla.org/en-US/docs/Security_best_practices_in_extensions#Code_wrapping
-var VERB=1;
-var DBUG=2;
-var INFO=3;
-var NOTE=4;
-var WARN=5;
+const VERB=1;
+const DBUG=2;
+const INFO=3;
+const NOTE=4;
+const WARN=5;
 
-var CC = Components.classes;
-var CI = Components.interfaces;
+const CC = Components.classes;
+const CI = Components.interfaces;
 
 var HTTPSEverywhere = CC["@eff.org/https-everywhere;1"]
                       .getService(Components.interfaces.nsISupports)
@@ -151,9 +151,14 @@ httpsEverywhere.reportRule = {
 
   setFilenameText: function () {
     var rulename = window.arguments[0].xmlName;
-    var comment_label = document.getElementById("comment-label");
-    comment_label.value += rulename;
+    var dialog_header = document.getElementById("dialog-header");
+    dialog_header.value += rulename;
   },
 };
+
+function dont_ask_again() {
+    // Don't submit reports
+  httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 0);
+}
 
 window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);
