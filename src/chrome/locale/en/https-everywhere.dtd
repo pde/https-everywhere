@@ -40,6 +40,8 @@
 <!ENTITY https-everywhere.report.paragraph2 "We collect the following information from these reports: the name of the ruleset, your operating system, your browser version, the version of HTTPS Everywhere you are using, and an optional comment on why the ruleset is broken.">
 <!ENTITY https-everywhere.report.dont_ask_again "Don't ask again">
 <!ENTITY https-everywhere.report.comment "Comment (optional): Why did you disable this rule?">
+<!ENTITY https-everywhere.report.preferences "Choose whether to ask to send bug reports when you disable rules.">
+<!ENTITY https-everywhere.report.enable "Enable bug reporting">
 
 
 

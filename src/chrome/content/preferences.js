@@ -255,3 +255,29 @@ function https_prefs_accept() {
   return true;  // https://developer.mozilla.org/en/XUL/dialog#a-ondialogaccept
                 // also close things if there is no out meta prefs window
 }
+
+function toggle_report() {
+  var new_opt = document.getElementById("toggle_report").checked;
+  var new_val = new_opt ? 1 : 0; 
+  o_httpsprefs.setIntPref("report_disabled_rules", new_opt); //fix this  
+}
+
+function show_advanced_report() {
+  var adv_opts_box = document.getElementById("advanced-opts");
+  recursive_set(adv_opts_box, "hidden", "false");
+  document.getElementById("show-advanced-button").hidden = true;
+  document.getElementById("hide-advanced-button").hidden = false;
+}
+
+function hide_advanced_report() {
+  var adv_opts_box = document.getElementById("advanced-opts");
+  recursive_set(adv_opts_box, "hidden", "true");
+  document.getElementById("show-advanced-button").hidden = false;
+  document.getElementById("hide-advanced-button").hidden = true;
+}
+
+function recursive_set(node, attrib, value) {
+  node.setAttribute(attrib, value);
+  for (var i=0; i<node.childNodes.length; i++)
+    recursive_set(node.childNodes[i], attrib, value);
+}
