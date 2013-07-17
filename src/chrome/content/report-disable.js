@@ -149,21 +149,20 @@ httpsEverywhere.reportRule = {
     HTTPSEverywhere.log(INFO, "submit failed");
   },
 
+  setFilenameText: function() {
+      var rulename = window.arguments[0].xmlName;
+      var dialog_header = document.getElementById("dialog-header");
+      dialog_header.setAttribute("title", dialog_header.getAttribute("title")+rulename);
+  },
+
+  disable: function() {
+    httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 0);
+  },
+
+  enable: function() {
+    httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 1);
+  }
+
 };
   
-
-function set_filename_text() {
-    var rulename = window.arguments[0].xmlName;
-    var dialog_header = document.getElementById("dialog-header");
-    dialog_header.setAttribute("title", dialog_header.getAttribute("title")+rulename);
-}
-
-function dont_ask_again() {
-  httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 0);
-}
-
-function turn_on() {
-  httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 1);
-}
-
-window.addEventListener("load", set_filename_text, false);
+window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);

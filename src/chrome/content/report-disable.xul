@@ -18,7 +18,7 @@
 	
     <script type="application/x-javascript" src="report-disable.js"/>
     <commandset>
-	    <command id="dont-ask-again" oncommand="dont_ask_again()" />
+	    <command id="dont-ask-again" oncommand="httpsEverywhere.reportRule.disable()" />
     </commandset>
 
     <dialogheader id="dialog-header" title="Report a problem with this rule: "/>
