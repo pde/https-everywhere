@@ -102,7 +102,7 @@ function hide_advanced() {
 function recursive_set(node, attrib, value) {
   node.setAttribute(attrib, value);
   for (var i=0; i < node.childNodes.length; i++) 
-    recursive_set(node.childNodes[i], attrib, value)
+    recursive_set(node.childNodes[i], attrib, value);
 }
 
 // called from the popup
