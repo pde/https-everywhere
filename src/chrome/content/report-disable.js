@@ -157,12 +157,10 @@ httpsEverywhere.reportRule = {
 
   disable: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false);
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   enable: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   toggle: function() {
@@ -182,19 +180,24 @@ httpsEverywhere.reportRule = {
       rr.disableTorOnly();
     } else {
       rr.enable();
+      rr.enableTorOnly();
     }
   },
 
   checkboxTor: function() {
+    var rr = httpsEverywhere.reportRule;
     var torbox = document.getElementById("tor-ask");
-    if (httpsEverywhere.reportRule.prefs.getBoolPref("report_disabled_rules_tor_only")) {
+    if (rr.prefs.getBoolPref("report_disabled_rules_tor_only")) {
       torbox.setAttribute("checked", "true");
     }
   },
 
   enableTorOnly: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", true);
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false);
+  },
+
+  disableTorOnly: function() {
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   showHelper: function() {
@@ -206,9 +209,10 @@ httpsEverywhere.reportRule = {
     var rr = httpsEverywhere.reportRule;
     rr.toggle();
     rr.showHelper();
-    if (!rr.prefs.getBoolPref("report_disabled_rules") & !rr.prefs.getBoolPref("report_disabled_rules_tor_only")) { 
-      // the case where reporting is off
+    if (document.getElementById("tor-ask").getAttribute("checked", "true")) { 
+      // don't let both boxes be checked at once
       document.getElementById("tor-ask").setAttribute("checked", "false");
+      rr.disableTorOnly;
     }
   },
 
@@ -216,9 +220,9 @@ httpsEverywhere.reportRule = {
     var rr = httpsEverywhere.reportRule;
     rr.toggleTor();
     rr.showHelper();
-    if (rr.prefs.getBoolPref("report_disabled_rules") | rr.prefs.getBoolPref("report_disabled_rules_tor_only")) {
-      // the case where one of the reporting options is on
+    if (document.getElementById("dont-ask").getAttribute("checked", "true")) {
       document.getElementById("dont-ask").setAttribute("checked", "false");
+      rr.enable;
     }
   }
 };

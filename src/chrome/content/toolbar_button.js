@@ -237,11 +237,7 @@ function toggle_rule(rule_id) {
     aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
  		    rs.xmlName, "chrome,centerscreen",
 		    {xmlName: rs.xmlName, GITCommitID: GITID});
-  } else if (tor_report && !rs.active) {
-    aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
- 		    rs.xmlName, "chrome,centerscreen",
-		    {xmlName: rs.xmlName, GITCommitID: GITID});
-  }
+ }
 
   var domWin = content.document.defaultView.top;
   /*if (domWin instanceof CI.nsIDOMWindow) {
