@@ -65,9 +65,9 @@
     <vbox>
       <hbox>  
         <spacer flex="1" />
-	  <button label="show advanced" onclick="show_advanced_report()"
+	  <button label="&https-everywhere.report.advanced_show;" onclick="show_advanced_report()"
 	          id="show-advanced-button" />
-	  <button label="hide advanced" onclick="hide_advanced_report()"
+	  <button label="&https-everywhere.report.advanced_hide;" onclick="hide_advanced_report()"
                   id="hide-advanced-button" hidden="true" />
         <spacer flex="1" />
       </hbox>	

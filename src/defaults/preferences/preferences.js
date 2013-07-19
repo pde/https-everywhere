@@ -1,8 +1,10 @@
 pref("extensions.https_everywhere.LogLevel", 2); //verbose for debugging 
 pref("extensions.https_everywhere.globalEnabled",true);
 
-// possible values are 0="never", 1="sometimes", 2="always"
-pref("extensions.https_everywhere.report_disabled_rules",1);
+// report_disabled_rules == ALWAYS ask to report disabled
+// (overrides report_disabled_rules_tor_only)
+pref("extensions.https_everywhere.report_disabled_rules",true);
+pref("extensions.https_everywhere.report_disabled_rules_tor_only", false);
 pref("extensions.https_everywhere.report_host", "zyan.scripts.mit.edu");
 
 // SSl Observatory preferences

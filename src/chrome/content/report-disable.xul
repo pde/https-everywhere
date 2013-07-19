@@ -19,7 +19,8 @@
 	
     <script type="application/x-javascript" src="report-disable.js"/>
     <commandset>
-	    <command id="dont-ask-again" oncommand="httpsEverywhere.reportRule.disable()" />
+	    <command id="dont-ask-again" oncommand="httpsEverywhere.reportRule.disable(); httpsEverywhere.reportRule.showHelper()" />
+   	    <command id="tor-ask-again" oncommand="httpsEverywhere.reportRule.enableTorOnly(); httpsEverywhere.reportRule.showHelper()" />
     </commandset>
 
     <dialogheader id="dialog-header" title="&https-everywhere.report.title;"/>
@@ -30,6 +31,16 @@
     <label id="comment-label" control="comment" value="&https-everywhere.report.comment; " />
     <textbox id="comment" multiline="true" spellcheck="true"/>
     <separator class="thin" />
-    <checkbox label="&https-everywhere.report.dont_ask_again;" id="dont-ask"
-	      command="dont-ask-again" style="font-size:1.5em;"/>
+    <groupbox>
+      <vbox>
+	<checkbox id="dont-ask" label="&https-everywhere.report.dont_ask_again;" 
+         	 command="dont-ask-again" style="font-size:1.5em"/>
+        <checkbox id="tor-ask" label="&https-everywhere.report.only_ask_again_during_tor;"
+		 command="tor-ask-again" style="font-size:1em"/>
+        <box id="helper-text" hidden="true">
+          <description>&https-everywhere.report.helper_text;</description>
+        </box>
+      </vbox>
+    </groupbox>
+
 </dialog>

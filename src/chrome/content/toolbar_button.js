@@ -226,18 +226,19 @@ function toggle_rule(rule_id) {
   rs.toggle();
 
   var prefs = HTTPSEverywhere.get_prefs();
-  var report = prefs.getIntPref("report_disabled_rules");
+  var report = prefs.getBoolPref("report_disabled_rules");
+  var tor_report = prefs.getBoolPref("report_disabled_rules_tor_only");
 
   var aWin = CC['@mozilla.org/appshell/window-mediator;1']
 	  .getService(CI.nsIWindowMediator)
 	  .getMostRecentWindow('navigator:browser');
 
-  if ((report === 2) && !rs.active) {
-	  alert("Oops, this option probably should not exist");
-  } else if ((report === 1) && !rs.active) {
-     	  aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
-			  rs.xmlName, "chrome,centerscreen",
-			  {xmlName: rs.xmlName, GITCommitID: GITID});
+  if (report && !rs.active) {
+    aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
+ 		    rs.xmlName, "chrome,centerscreen",
+		    {xmlName: rs.xmlName, GITCommitID: GITID});
+  } else if (tor_report && !rs.active) {
+    alert("only reporting when tor is active");   	  
   }
 
   var domWin = content.document.defaultView.top;

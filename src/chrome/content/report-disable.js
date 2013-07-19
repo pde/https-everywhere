@@ -156,13 +156,23 @@ httpsEverywhere.reportRule = {
   },
 
   disable: function() {
-    httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 0);
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false);
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   enable: function() {
-    httpsEverywhere.reportRule.prefs.setIntPref("report_disabled_rules", 1);
-  }
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
+  },
 
+  enableTorOnly: function() {
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", true);
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false)
+  },
+
+  showHelper: function() {
+    var helper_text = document.getElementById("helper-text");
+    helper_text.setAttribute("hidden", "false");
+  }
 };
   
 window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);

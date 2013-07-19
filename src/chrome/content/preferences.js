@@ -258,8 +258,8 @@ function https_prefs_accept() {
 
 function toggle_report() {
   var new_opt = document.getElementById("toggle_report").checked;
-  var new_val = new_opt ? 1 : 0; 
-  o_httpsprefs.setIntPref("report_disabled_rules", new_opt); //fix this  
+  var new_val = new_opt ? true : false; 
+  o_httpsprefs.setBoolPref("report_disabled_rules", new_opt); //fix this  
 }
 
 function show_advanced_report() {
