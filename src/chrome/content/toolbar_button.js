@@ -14,6 +14,10 @@ HTTPSEverywhere = CC["@eff.org/https-everywhere;1"]
                       .getService(Components.interfaces.nsISupports)
                       .wrappedJSObject;
 
+var ssl_observatory = CC["@eff.org/ssl-observatory;1"]
+                    .getService(Components.interfaces.nsISupports)
+                    .wrappedJSObject;
+
 // avoid polluting global namespace
 if (!httpsEverywhere) { var httpsEverywhere = {}; }
 
@@ -40,6 +44,7 @@ httpsEverywhere.toolbarButton = {
 
     var tb = httpsEverywhere.toolbarButton;
 
+    ssl_observatory.testProxySettings();
     // make sure icon is proper color during init
     tb.changeIcon();
 
@@ -232,7 +237,7 @@ function toggle_rule(rule_id) {
   var aWin = CC['@mozilla.org/appshell/window-mediator;1']
 	  .getService(CI.nsIWindowMediator)
 	  .getMostRecentWindow('navigator:browser');
-
+  var torbutton_avail = ssl_observatory.proxy_test_successful;
   if (report && !rs.active) {
     aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
  		    rs.xmlName, "chrome,centerscreen",
@@ -244,6 +249,7 @@ function toggle_rule(rule_id) {
     var alist = HTTPSEverywhere.getExpando(domWin,"applicable_rules", null);
     if (alist) alist.empty();
   }*/
+  alert(torbutton_avail);
   reload_window();
 }
 
