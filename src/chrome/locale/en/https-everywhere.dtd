@@ -45,6 +45,8 @@
 <!ENTITY https-everywhere.report.comment "Comment (optional): Why did you disable this rule?">
 <!ENTITY https-everywhere.report.preferences "When you disable a ruleset that is causing a site to break, we can create an anonymous bug report to help us fix that ruleset. If you check one of these options, we will ask whether you want to send a bug report each time you disable a rule.">
 <!ENTITY https-everywhere.report.enable "Enable bug reporting">
+<!ENTITY https-everywhere.report.enable_tor "Enable bug reporting ONLY when Tor is active">
+<!ENTITY https-everywhere.report.disable "Disable bug reporting">
 <!ENTITY https-everywhere.report.caption "Automatic bug reporting preferences">
 <!ENTITY https-everywhere.report.advanced_show "Advanced Options">
 <!ENTITY https-everywhere.report.advanced_hide "Hide Advanced Options">

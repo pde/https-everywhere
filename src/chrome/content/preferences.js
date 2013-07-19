@@ -256,10 +256,18 @@ function https_prefs_accept() {
                 // also close things if there is no out meta prefs window
 }
 
-function toggle_report() {
-  var new_opt = document.getElementById("toggle_report").checked;
-  var new_val = new_opt ? true : false; 
-  o_httpsprefs.setBoolPref("report_disabled_rules", new_opt); //fix this  
+function enable_report() {
+  o_httpsprefs.setBoolPref("report_disabled_rules", true);
+  o_httpsprefs.setBoolPref("report_disabled_rules_tor_only", false);  
+}
+
+function enable_report_tor() {
+  o_httpsprefs.setBoolPref("report_disabled_rules", true);
+  o_httpsprefs.setBoolPref("report_disabled_rules_tor_only", true);  
+}
+
+function disable_report() {
+  o_httpsprefs.setBoolPref("report_disabled_rules", false);
 }
 
 function show_advanced_report() {
@@ -284,11 +292,19 @@ function recursive_set(node, attrib, value) {
     recursive_set(node.childNodes[i], attrib, value);
 }
 
-function set_checkbox_helper(elem, prefname) {
-    var box = document.getElementById(elem);
-    if (o_httpsprefs.getBoolPref(prefname)) {
-      box.setAttribute("checked", "true");
+function set_radio() {
+    var elem;
+    var radiogroup = document.getElementById("report_group");
+    radiogroup.selectedItem.setAttribute("selected", "false");
+    if (!o_httpsprefs.getBoolPref("report_disabled_rules")) {
+      elem = 'disable_report';
+    } else if (o_httpsprefs.getBoolPref("report_disabled_rules_tor_only")) {
+      elem = 'enable_report_tor';
+    } else {
+      elem = 'enable_report';
     }
+    var radio = document.getElementById(elem);
+    radio.setAttribute("selected", "true");
 }
 
-window.addEventListener("load", function() {set_checkbox_helper("toggle_report", "report_disabled_rules");}, false)
+window.addEventListener("load", set_radio, false)

@@ -23,7 +23,9 @@
     <script type="application/x-javascript" src="preferences.js"/>
 
     <commandset>
-      <command id="toggle-report" oncommand="toggle_report()" />   
+      <command id="enable-report" oncommand="enable_report()" />   
+      <command id="disable-report" oncommand="disable_report()" />   
+      <command id="enable-report-tor" oncommand="enable_report_tor()" />   
     </commandset> 
     <popupset>
         <menupopup id="tree-contextmenu" onpopupshowing="resetSelectedMenu()">
@@ -75,9 +77,17 @@
         <groupbox hidden="true" tooltip="report-tip">
 	  <caption label="&https-everywhere.report.caption;" />
 	  <description>&https-everywhere.report.preferences;"</description>
-	  <checkbox label="&https-everywhere.report.enable;" 
-		    id="toggle_report"
-		    command="toggle-report"/>
+	  <radiogroup id="report_group">
+	    <radio label="&https-everywhere.report.enable;" 
+	       	   id="enable_report"
+		   command="enable-report"/>
+	    <radio label="&https-everywhere.report.enable_tor;"
+		   id="enable_report_tor" 
+		   command="enable-report-tor"/>
+	    <radio label="&https-everywhere.report.disable;"
+		   id="disable_report"
+		   command="disable-report"/>
+          </radiogroup>
         </groupbox>
       </vbox>
     </vbox>
