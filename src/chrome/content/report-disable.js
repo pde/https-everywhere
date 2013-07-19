@@ -189,7 +189,7 @@ httpsEverywhere.reportRule = {
     if (httpsEverywhere.reportRule.prefs.getBoolPref("report_disabled_rules_tor_only")) {
       torbox.setAttribute("checked", "true");
     }
-  }
+  },
 
   enableTorOnly: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", true);

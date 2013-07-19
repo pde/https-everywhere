@@ -283,3 +283,12 @@ function recursive_set(node, attrib, value) {
   for (var i=0; i<node.childNodes.length; i++)
     recursive_set(node.childNodes[i], attrib, value);
 }
+
+function set_checkbox_helper(elem, prefname) {
+    var box = document.getElementById(elem);
+    if (o_httpsprefs.getBoolPref(prefname)) {
+      box.setAttribute("checked", "true");
+    }
+}
+
+window.addEventListener("load", function() {set_checkbox_helper("toggle_report", "report_disabled_rules");}, false)
