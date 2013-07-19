@@ -164,9 +164,40 @@ httpsEverywhere.reportRule = {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
   },
 
+  toggle: function() {
+    var rr = httpsEverywhere.reportRule;
+    var report = rr.prefs.getBoolPref("report_disabled_rules");
+    if (report) {
+      rr.disable();
+    } else {
+      rr.enable();
+    }
+  },
+
+  toggleTor: function() {
+    var rr = httpsEverywhere.reportRule;
+    var report_tor = rr.prefs.getBoolPref("report_disabled_rules_tor_only");
+    if (report_tor) {
+      rr.disableTorOnly();
+    } else {
+      rr.enableTorOnly();
+    }
+  },
+
+  checkboxTor: function() {
+    var torbox = document.getElementById("tor-ask");
+    if (httpsEverywhere.reportRule.prefs.getBoolPref("report_disabled_rules_tor_only")) {
+      torbox.setAttribute("checked", "true");
+    }
+  }
+
   enableTorOnly: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", true);
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false)
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false);
+  },
+
+  disableTorOnly: function() {
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   showHelper: function() {
@@ -176,3 +207,4 @@ httpsEverywhere.reportRule = {
 };
   
 window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);
+window.addEventListener("load", httpsEverywhere.reportRule.checkboxTor, false);
