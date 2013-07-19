@@ -38,7 +38,7 @@
         <checkbox id="tor-ask" label="&https-everywhere.report.only_ask_again_during_tor;"
 		 command="tor-ask-again" style="font-size:1em"/>
         <box id="helper-text" hidden="true">
-          <description>&https-everywhere.report.helper_text;</description>
+		<description style="width: 300px">&https-everywhere.report.helper_text;</description>
         </box>
       </vbox>
     </groupbox>
