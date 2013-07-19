@@ -162,6 +162,7 @@ httpsEverywhere.reportRule = {
 
   enable: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   toggle: function() {
@@ -180,7 +181,7 @@ httpsEverywhere.reportRule = {
     if (report_tor) {
       rr.disableTorOnly();
     } else {
-      rr.enableTorOnly();
+      rr.enable();
     }
   },
 
@@ -196,16 +197,31 @@ httpsEverywhere.reportRule = {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false);
   },
 
-  disableTorOnly: function() {
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
-  },
-
   showHelper: function() {
     var helper_text = document.getElementById("helper-text");
     helper_text.setAttribute("hidden", "false");
+  },
+
+  onDisableCheck: function() {
+    var rr = httpsEverywhere.reportRule;
+    rr.toggle();
+    rr.showHelper();
+    if (!rr.prefs.getBoolPref("report_disabled_rules") & !rr.prefs.getBoolPref("report_disabled_rules_tor_only")) { 
+      // the case where reporting is off
+      document.getElementById("tor-ask").setAttribute("checked", "false");
+    }
+  },
+
+  onTorCheck: function() {
+    var rr = httpsEverywhere.reportRule;
+    rr.toggleTor();
+    rr.showHelper();
+    if (rr.prefs.getBoolPref("report_disabled_rules") | rr.prefs.getBoolPref("report_disabled_rules_tor_only")) {
+      // the case where one of the reporting options is on
+      document.getElementById("dont-ask").setAttribute("checked", "false");
+    }
   }
 };
-  
+     
 window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);
 window.addEventListener("load", httpsEverywhere.reportRule.checkboxTor, false);

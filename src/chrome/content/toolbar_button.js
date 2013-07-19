@@ -238,7 +238,9 @@ function toggle_rule(rule_id) {
  		    rs.xmlName, "chrome,centerscreen",
 		    {xmlName: rs.xmlName, GITCommitID: GITID});
   } else if (tor_report && !rs.active) {
-    alert("only reporting when tor is active");   	  
+    aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
+ 		    rs.xmlName, "chrome,centerscreen",
+		    {xmlName: rs.xmlName, GITCommitID: GITID});
   }
 
   var domWin = content.document.defaultView.top;

@@ -19,8 +19,8 @@
 	
     <script type="application/x-javascript" src="report-disable.js"/>
     <commandset>
-	    <command id="dont-ask-again" oncommand="httpsEverywhere.reportRule.toggle(); httpsEverywhere.reportRule.showHelper()" />
-   	    <command id="tor-ask-again" oncommand="httpsEverywhere.reportRule.toggleTor(); httpsEverywhere.reportRule.showHelper()" />
+	    <command id="dont-ask-again" oncommand="httpsEverywhere.reportRule.onDisableCheck()" />
+   	    <command id="tor-ask-again" oncommand="httpsEverywhere.reportRule.onTorCheck()" />
     </commandset>
 
     <dialogheader id="dialog-header" title="&https-everywhere.report.title;"/>

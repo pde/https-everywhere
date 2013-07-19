@@ -2,7 +2,8 @@ pref("extensions.https_everywhere.LogLevel", 2); //verbose for debugging
 pref("extensions.https_everywhere.globalEnabled",true);
 
 // report_disabled_rules == ALWAYS ask to report disabled
-// (overrides report_disabled_rules_tor_only)
+// report_disabled_rules and report_disabled_rules_tor_only should be
+// treated as mutually exclusive
 pref("extensions.https_everywhere.report_disabled_rules",true);
 pref("extensions.https_everywhere.report_disabled_rules_tor_only", false);
 pref("extensions.https_everywhere.report_host", "zyan.scripts.mit.edu");
