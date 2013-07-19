@@ -198,6 +198,7 @@ httpsEverywhere.reportRule = {
 
   disableTorOnly: function() {
     httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
+    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
   },
 
   showHelper: function() {
