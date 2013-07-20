@@ -27,6 +27,11 @@ var HTTPSEverywhere = CC["@eff.org/https-everywhere;1"]
                       .getService(Components.interfaces.nsISupports)
                       .wrappedJSObject;
 
+var ssl_observatory = CC["@eff.org/ssl-observatory;1"]
+                    .getService(Components.interfaces.nsISupports)
+                    .wrappedJSObject;
+
+
 if (!httpsEverywhere) { var httpsEverywhere = {}; };
 /**
  * JS Object for reporting disabled rulesets.
@@ -81,12 +86,17 @@ httpsEverywhere.reportRule = {
         rr.finishRequest(p);
       });
     } catch (ex) {
-      HTTPSEverywhere.log(WARN, ex);
-      // Firefox 3.6 and before; Mozilla 1.9.2 and before
-      var em = CC["@mozilla.org/extensions/manager;1"].getService(CI.nsIExtensionManager);
-      var addon = em.getItemForID("https-everywhere@eff.org");
-      p.push("ext_version="+addon.version);
-      rr.finishRequest(p);
+      try {
+        HTTPSEverywhere.log(WARN, ex);
+        // Firefox 3.6 and before; Mozilla 1.9.2 and before
+        var em = CC["@mozilla.org/extensions/manager;1"].getService(CI.nsIExtensionManager);
+        var addon = em.getItemForID("https-everywhere@eff.org");
+        p.push("ext_version="+addon.version);
+      } catch (ex2) {
+        HTTPSEverywhere.log(WARN, 'Failed to get https-version info due to: '+ex2);
+      } finally {
+        rr.finishRequest(p);
+      }
     }
   },
   
@@ -117,8 +127,18 @@ httpsEverywhere.reportRule = {
     reqParams.push("rulename="+rulename);
     reqParams.push("commit_id="+commit_id);
     reqParams.push("comment="+comment);
-    rr.getSysInfoSync(reqParams);
-    rr.getSysInfoAsync(reqParams);
+    if (ssl_observatory.proxy_test_successful) {
+      // if someone is using Tor, don't risk compromising privacy by
+      // sending system info? 
+      rr.finishRequest(reqParams);
+    } else {
+      try {
+        rr.getSysInfoSync(reqParams);
+      } catch(e) {
+        HTTPSEverywhere.log(WARN, 'Error getting system info: '+ex);
+      }
+      rr.getSysInfoAsync(reqParams);
+    }
   },
 
   buildRequest: function(params) {
