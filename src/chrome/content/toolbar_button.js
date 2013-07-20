@@ -44,7 +44,9 @@ httpsEverywhere.toolbarButton = {
 
     var tb = httpsEverywhere.toolbarButton;
 
+    // run this here in case SSLObservatory() hasn't run 
     ssl_observatory.testProxySettings();
+
     // make sure icon is proper color during init
     tb.changeIcon();
 
@@ -238,18 +240,19 @@ function toggle_rule(rule_id) {
 	  .getService(CI.nsIWindowMediator)
 	  .getMostRecentWindow('navigator:browser');
   var torbutton_avail = ssl_observatory.proxy_test_successful;
+  HTTPSEverywhere.log(INFO, 'Proxy test returned: '+torbutton_avail)  
   if (report && !rs.active) {
-    aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
+    if (!tor_report || torbutton_avail) {
+      aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
  		    rs.xmlName, "chrome,centerscreen",
 		    {xmlName: rs.xmlName, GITCommitID: GITID});
- }
-
+    }
+  }
   var domWin = content.document.defaultView.top;
   /*if (domWin instanceof CI.nsIDOMWindow) {
     var alist = HTTPSEverywhere.getExpando(domWin,"applicable_rules", null);
     if (alist) alist.empty();
   }*/
-  alert(torbutton_avail);
   reload_window();
 }
 

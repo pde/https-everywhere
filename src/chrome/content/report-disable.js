@@ -14,11 +14,11 @@
 // global namespace pollution is avoided, although technically not required for
 // windows created by add-on.
 // See: https://developer.mozilla.org/en-US/docs/Security_best_practices_in_extensions#Code_wrapping
-const VERB=1;
-const DBUG=2;
-const INFO=3;
-const NOTE=4;
-const WARN=5;
+VERB=1;
+DBUG=2;
+INFO=3;
+NOTE=4;
+WARN=5;
 
 const CC = Components.classes;
 const CI = Components.interfaces;
@@ -187,9 +187,8 @@ httpsEverywhere.reportRule = {
   checkboxTor: function() {
     var rr = httpsEverywhere.reportRule;
     var torbox = document.getElementById("tor-ask");
-    if (rr.prefs.getBoolPref("report_disabled_rules_tor_only")) {
-      torbox.setAttribute("checked", "true");
-    }
+    var report_tor = rr.prefs.getBoolPref("report_disabled_rules_tor_only");
+    torbox.checked = report_tor; 
   },
 
   enableTorOnly: function() {
