@@ -307,4 +307,4 @@ function set_radio() {
     radio.setAttribute("selected", "true");
 }
 
-window.addEventListener("load", set_radio, false)
+window.addEventListener("load", set_radio, false);
