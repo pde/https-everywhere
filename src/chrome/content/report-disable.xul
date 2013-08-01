@@ -21,6 +21,9 @@
     <commandset>
 	    <command id="dont-ask-again" oncommand="httpsEverywhere.reportRule.onDisableCheck()" />
    	    <command id="tor-ask-again" oncommand="httpsEverywhere.reportRule.onTorCheck()" />
+	    <command id="send-addon-version" oncommand="httpsEverywhere.reportRule.toggleSysReport('report_addon_version')" />
+   	    <command id="send-browser" oncommand="httpsEverywhere.reportRule.toggleSysReport('report_browser')" />
+	    <command id="send-os" oncommand="httpsEverywhere.reportRule.toggleSysReport('report_os')" />
     </commandset>
 
     <dialogheader id="dialog-header" title="&https-everywhere.report.title;"/>
@@ -28,6 +31,18 @@
     <separator class="thin" />
     <description>&https-everywhere.report.paragraph2;</description>
     <separator class="thin" />
+     <label id="sysinfo-label" control="sysinfo" value="Select what system info to report:" />
+     <groupbox id="sysinfo">
+      <vbox>
+	<checkbox id="send-addon-version-box" label="Report my version of HTTPS Everywhere" 
+         	 command="send-addon-version" style="font-size:1em"/>
+        <checkbox id="send-browser-box" label="Report my browser version"
+		 command="send-browser" style="font-size:1em"/>
+        <checkbox id="send-os-box" label="Report my operating system"
+		 command="send-os" style="font-size:1em"/>
+      </vbox>
+    </groupbox>
+   <separator class="thin" />
     <label id="comment-label" control="comment" value="&https-everywhere.report.comment; " />
     <textbox id="comment" multiline="true" spellcheck="true"/>
     <separator class="thin" />

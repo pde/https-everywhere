@@ -8,6 +8,11 @@ pref("extensions.https_everywhere.report_disabled_rules", true);
 pref("extensions.https_everywhere.report_disabled_rules_tor_only", false);
 pref("extensions.https_everywhere.report_host", "zyan.scripts.mit.edu");
 
+// optional system info to send along with the name of disabled rule
+pref("extensions.https_everywhere.report_browser", false);
+pref("extensions.https_everywhere.report_addon_version", true);
+pref("extensions.https_everywhere.report_os", false);
+
 // SSl Observatory preferences
 pref("extensions.https_everywhere._observatory.enabled",false);
 

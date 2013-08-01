@@ -59,18 +59,24 @@ httpsEverywhere.reportRule = {
   },
 
   getSysInfoSync: function(p) {
+    // get the OS and browser version (optional)
     // https://developer.mozilla.org/en-US/docs/Code_snippets/Miscellaneous#System_info
-    try {
-      var osString = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULRuntime).OS;
-    } catch (ex) {
-    // needed for Seamonkey 2.0
-      var osString = CC["@mozilla.org/network/protocol;1?name=http"]
-                         .getService(CI.nsIHttpProtocolHandler).oscpu;
+    var pref = httpsEverywhere.reportRule.prefs;
+    if (pref.getBoolPref("report_os")) {
+      try {
+        var osString = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULRuntime).OS;
+      } catch (ex) {
+      // needed for Seamonkey 2.0
+        var osString = CC["@mozilla.org/network/protocol;1?name=http"]
+                           .getService(CI.nsIHttpProtocolHandler).oscpu;
+      }
+      p.push("os="+osString);
     }
-    p.push("os="+osString);
-    var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
-    p.push("app_name="+appInfo.name); // ex: firefox
-    p.push("app_version="+appInfo.version); // ex: 2.0.0.1
+    if (pref.getBoolPref("report_browser")) {
+      var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
+      p.push("app_name="+appInfo.name); // ex: firefox
+      p.push("app_version="+appInfo.version); // ex: 2.0.0.1
+    }
   },
 
   getSysInfoAsync: function(p) {
@@ -131,13 +137,16 @@ httpsEverywhere.reportRule = {
       // if someone is using Tor, don't risk compromising privacy by
       // sending system info? 
       rr.finishRequest(reqParams);
-    } else {
+    } else if (rr.prefs.getBoolPref("report_addon_version")) {
       try {
         rr.getSysInfoSync(reqParams);
       } catch(e) {
-        HTTPSEverywhere.log(WARN, 'Error getting system info: '+ex);
+        HTTPSEverywhere.log(WARN, 'Error getting system info: '+e);
       }
       rr.getSysInfoAsync(reqParams);
+    } else {
+      rr.getSysInfoSync(reqParams);
+      rr.finishRequest;
     }
   },
 
@@ -170,9 +179,9 @@ httpsEverywhere.reportRule = {
   },
 
   setFilenameText: function() {
-      var rulename = window.arguments[0].xmlName;
-      var dialog_header = document.getElementById("dialog-header");
-      dialog_header.setAttribute("title", dialog_header.getAttribute("title")+rulename);
+    var rulename = window.arguments[0].xmlName;
+    var dialog_header = document.getElementById("dialog-header");
+    dialog_header.setAttribute("title", dialog_header.getAttribute("title")+rulename);
   },
 
   disable: function() {
@@ -203,12 +212,13 @@ httpsEverywhere.reportRule = {
       rr.enableTorOnly();
     }
   },
-
-  checkboxTor: function() {
-    var rr = httpsEverywhere.reportRule;
-    var torbox = document.getElementById("tor-ask");
-    var report_tor = rr.prefs.getBoolPref("report_disabled_rules_tor_only");
-    torbox.checked = report_tor; 
+  
+  setCheckbox: function(setting, elem) {
+    // check boxes according to current settings
+    var pref = httpsEverywhere.reportRule.prefs;
+    var current = pref.getBoolPref(setting);
+    var box = document.getElementById(elem);
+    box.checked = current;
   },
 
   enableTorOnly: function() {
@@ -243,8 +253,22 @@ httpsEverywhere.reportRule = {
       document.getElementById("dont-ask").setAttribute("checked", "false");
       rr.enable;
     }
+  },
+
+  toggleSysReport: function(setting) {
+    var pref = httpsEverywhere.reportRule.prefs;
+    var current = pref.getBoolPref(setting);
+    pref.setBoolPref(setting, !current);
   }
 };
      
-window.addEventListener("load", httpsEverywhere.reportRule.setFilenameText, false);
-window.addEventListener("load", httpsEverywhere.reportRule.checkboxTor, false);
+// set the title of the dialog window and the checkbox states
+window.addEventListener("load", function() {
+  var rr = httpsEverywhere.reportRule;
+  rr.setCheckbox("report_browser", "send-browser-box");
+  rr.setCheckbox("report_addon_version", "send-addon-version-box");
+  rr.setCheckbox("report_os", "send-os-box");
+  rr.setCheckbox("report_disabled_rules_tor_only", "tor-ask");
+  rr.setFilenameText();
+}, false);
+
