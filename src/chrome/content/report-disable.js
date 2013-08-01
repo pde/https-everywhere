@@ -133,20 +133,17 @@ httpsEverywhere.reportRule = {
     reqParams.push("rulename="+rulename);
     reqParams.push("commit_id="+commit_id);
     reqParams.push("comment="+comment);
-    if (ssl_observatory.proxy_test_successful) {
-      // if someone is using Tor, don't risk compromising privacy by
-      // sending system info? 
-      rr.finishRequest(reqParams);
-    } else if (rr.prefs.getBoolPref("report_addon_version")) {
+    if (rr.prefs.getBoolPref("report_addon_version")) {
       try {
         rr.getSysInfoSync(reqParams);
       } catch(e) {
         HTTPSEverywhere.log(WARN, 'Error getting system info: '+e);
+      } finally {
+        rr.getSysInfoAsync(reqParams);
       }
-      rr.getSysInfoAsync(reqParams);
     } else {
       rr.getSysInfoSync(reqParams);
-      rr.finishRequest;
+      rr.finishRequest(reqParams);
     }
   },
 
