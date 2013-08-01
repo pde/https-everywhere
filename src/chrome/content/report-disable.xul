@@ -48,10 +48,12 @@
     <separator class="thin" />
     <groupbox>
       <vbox>
-	<checkbox id="dont-ask" label="&https-everywhere.report.dont_ask_again;" 
+        <radiogroup id="report_group_disable">
+	  <radio id="dont-ask" label="&https-everywhere.report.dont_ask_again;" 
          	 command="dont-ask-again" style="font-size:1.5em"/>
-        <checkbox id="tor-ask" label="&https-everywhere.report.only_ask_again_during_tor;"
+          <radio id="tor-ask" label="&https-everywhere.report.only_ask_again_during_tor;"
 		 command="tor-ask-again" style="font-size:1em"/>
+        </radiogroup>
         <box id="helper-text" hidden="true">
 		<description style="width: 300px">&https-everywhere.report.helper_text;</description>
         </box>

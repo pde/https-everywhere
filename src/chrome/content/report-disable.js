@@ -184,49 +184,12 @@ httpsEverywhere.reportRule = {
     dialog_header.setAttribute("title", dialog_header.getAttribute("title")+rulename);
   },
 
-  disable: function() {
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", false);
-  },
-
-  enable: function() {
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules", true);
-  },
-
-  toggle: function() {
-    var rr = httpsEverywhere.reportRule;
-    var report = rr.prefs.getBoolPref("report_disabled_rules");
-    if (report) {
-      rr.disable();
-    } else {
-      rr.enable();
-    }
-  },
-
-  toggleTor: function() {
-    var rr = httpsEverywhere.reportRule;
-    var report_tor = rr.prefs.getBoolPref("report_disabled_rules_tor_only");
-    if (report_tor) {
-      rr.disableTorOnly();
-    } else {
-      rr.enable();
-      rr.enableTorOnly();
-    }
-  },
-  
   setCheckbox: function(setting, elem) {
     // check boxes according to current settings
     var pref = httpsEverywhere.reportRule.prefs;
     var current = pref.getBoolPref(setting);
     var box = document.getElementById(elem);
     box.checked = current;
-  },
-
-  enableTorOnly: function() {
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", true);
-  },
-
-  disableTorOnly: function() {
-    httpsEverywhere.reportRule.prefs.setBoolPref("report_disabled_rules_tor_only", false);
   },
 
   showHelper: function() {
@@ -236,22 +199,29 @@ httpsEverywhere.reportRule = {
 
   onDisableCheck: function() {
     var rr = httpsEverywhere.reportRule;
-    rr.toggle();
     rr.showHelper();
-    if (document.getElementById("tor-ask").getAttribute("checked", "true")) { 
-      // don't let both boxes be checked at once
-      document.getElementById("tor-ask").setAttribute("checked", "false");
-      rr.disableTorOnly;
-    }
+    rr.prefs.setBoolPref("report_disabled_rules", false);
   },
 
   onTorCheck: function() {
     var rr = httpsEverywhere.reportRule;
-    rr.toggleTor();
     rr.showHelper();
-    if (document.getElementById("dont-ask").getAttribute("checked", "true")) {
-      document.getElementById("dont-ask").setAttribute("checked", "false");
-      rr.enable;
+    rr.prefs.setBoolPref("report_disabled_rules", true);
+    rr.prefs.setBoolPref("report_disabled_rules_tor_only", true);
+  },
+
+  set_radio: function() {
+    // set radio buttons on window load according to prefs
+    var pref = httpsEverywhere.reportRule.prefs;
+    var elem;
+    var radiogroup = document.getElementById("report_group_disable");
+    radiogroup.selectedItem.setAttribute("selected", "false");
+    if (!pref.getBoolPref("report_disabled_rules")) {
+      elem = 'dont-ask';
+      document.getElementById(elem).setAttribute("selected", true);
+    } else if (pref.getBoolPref("report_disabled_rules_tor_only")){
+      elem = 'tor-ask';
+      document.getElementById(elem).setAttribute("selected", true);
     }
   },
 
@@ -268,7 +238,7 @@ window.addEventListener("load", function() {
   rr.setCheckbox("report_browser", "send-browser-box");
   rr.setCheckbox("report_addon_version", "send-addon-version-box");
   rr.setCheckbox("report_os", "send-os-box");
-  rr.setCheckbox("report_disabled_rules_tor_only", "tor-ask");
+  rr.set_radio();
   rr.setFilenameText();
 }, false);
 
