@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
-import sys, re, os, getopt
+import argparse
+import sys, re, os
 
 try:
     from lxml import etree
@@ -10,10 +11,25 @@ except ImportError:
     sys.stderr.write("** Please install libxml2 and lxml to permit validation!\n")
     sys.exit(0)
 
-longargs, args = getopt.gnu_getopt(sys.argv[1:], "", ["ignoredups=", "dupdir="])
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description="Ruleset validation script.")
+parser.add_argument('--ignoredups', type=str, nargs="*",
+    default="",
+    help="Ignore entries."
+    )
+parser.add_argument('--dupdir', type=str, nargs="*",
+    default="",
+    help="Duplicate directory."
+    )
+parser.add_argument('ruleset', metavar='XML directory', type=str, nargs="*",
+    default="src/chrome/content/rules",
+    help='Directory of XML files to validate.')
 
-ignoredups = [re.compile(val) for opt, val in longargs if opt == "--ignoredups"]
-dupdir = [val for opt, val in longargs if opt == "--dupdir"]
+args = parser.parse_args()
+
+ignoredups = [re.compile(val) for val in args.ignoredups]
+dupdir = [val for val in args.dupdir]
 
 def test_not_anchored(tree):
     # Rules not anchored to the beginning of a line.
@@ -210,12 +226,12 @@ for fi in nomes_all():
         if fi[-4:] != ".xml":
             continue
         failure = 1
-        sys.stdout.write("%s failed XML validity: %s\n" % (fi, oops))
+        sys.stderr.write("%s failed XML validity: %s\n" % (fi, oops))
     if not tree.xpath("/ruleset"):
         continue
     if not test_ruleset_name(tree):
         failure = 1
-        sys.stdout.write("failure: unnamed ruleset: %s\n" % fi)
+        sys.stderr.write("failure: unnamed ruleset: %s\n" % fi)
         continue
     ruleset_name = tree.xpath("/ruleset/@name")[0]
     if ruleset_name in all_names:
@@ -225,7 +241,7 @@ for fi in nomes_all():
     for test in tests:
         if not test(tree):
             failure = 1
-            sys.stdout.write("failure: %s failed test: %s\n" % (fi, test.__doc__))
+            sys.stderr.write("failure: %s failed test: %s\n" % (fi, test.__doc__))
     for target in tree.xpath("/ruleset/target/@host"):
         if target in all_targets and not any(ign.search(target) for ign in ignoredups):
             # suppress warning about duplicate targets if an --ignoredups
