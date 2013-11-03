@@ -267,17 +267,17 @@ function https_prefs_accept() {
 }
 
 function enable_report() {
-  o_httpsprefs.setBoolPref("report_disabled_rules", true);
-  o_httpsprefs.setBoolPref("report_disabled_rules_tor_only", false);  
+  https_everywhere.prefs.setBoolPref("report_disabled_rules", true);
+  https_everywhere.prefs.setBoolPref("report_disabled_rules_tor_only", false);  
 }
 
 function enable_report_tor() {
-  o_httpsprefs.setBoolPref("report_disabled_rules", true);
-  o_httpsprefs.setBoolPref("report_disabled_rules_tor_only", true);  
+  https_everywhere.prefs.setBoolPref("report_disabled_rules", true);
+  https_everywhere.prefs.setBoolPref("report_disabled_rules_tor_only", true);  
 }
 
 function disable_report() {
-  o_httpsprefs.setBoolPref("report_disabled_rules", false);
+  https_everywhere.prefs.setBoolPref("report_disabled_rules", false);
 }
 
 function show_advanced_report() {
@@ -306,9 +306,9 @@ function set_radio() {
     var elem;
     var radiogroup = document.getElementById("report_group");
     radiogroup.selectedItem.setAttribute("selected", "false");
-    if (!o_httpsprefs.getBoolPref("report_disabled_rules")) {
+    if (!https_everywhere.prefs.getBoolPref("report_disabled_rules")) {
       elem = 'disable_report';
-    } else if (o_httpsprefs.getBoolPref("report_disabled_rules_tor_only")) {
+    } else if (https_everywhere.prefs.getBoolPref("report_disabled_rules_tor_only")) {
       elem = 'enable_report_tor';
     } else {
       elem = 'enable_report';
