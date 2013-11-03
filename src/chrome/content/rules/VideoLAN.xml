@@ -30,27 +30,27 @@
 		- get
 		- images
 		- images1
+		- mailman
 		- trac
 		- wiki
 		- www1
 
 
-	Targets solely for wildcard cookies:
+	Wildcard cookies:
 
-		- *.forum.videolan.org
+		- .forum.videolan.org
 
 -->
 <ruleset name="VideoLAN (partial)">
 
 	<target host="videolan.org" />
 	<target host="*.videolan.org" />
-	<target host="*.forum.videolan.org" />
 
 
 	<securecookie host="(?:.*\.)?videolan\.org$" name=".+" />
 
 
-	<rule from="^http://((?:forum|get|images1?|trac|wiki|www1?)\.)?videolan\.org/"
+	<rule from="^http://((?:forum|get|images1?|mailman|trac|wiki|www1?)\.)?videolan\.org/"
 		to="https://$1videolan.org/" />
 
 	<!--	- Show www's data over https

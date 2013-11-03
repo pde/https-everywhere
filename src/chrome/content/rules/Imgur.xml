@@ -6,6 +6,10 @@
 			- s
 			- i.stack
 
+		- imgur-store.myshopify.com
+
+			- store
+
 
 	Nonfunctional subdomains:
 
@@ -16,7 +20,11 @@
 	Problematic subdomains:
 
 		- img	(refused)
-		- s	(404; mismatched, CN: gp1.wac.edgecastcdn.net)
+
+
+	Partially covered subdomains:
+
+		- (www.)
 
 
 	Fully covered subdomains:
@@ -25,20 +33,27 @@
 		- i
 		- img		(→ i)
 		- origin
-		- s		(→ ^)
+		- s
+		- store		(→ imgur-store.myshopify.com)
 
 -->
 <ruleset name="Imgur">
 
 	<target host="imgur.com" />
 	<target host="*.imgur.com" />
+		<!--
+			https://mail1.eff.org/pipermail/https-everywhere-rules/2013-July/001645.html
+
+			https://bugzilla.mozilla.org/show_bug.cgi?id=866986#c7
+										-->
+		<!--exclusion pattern="^http://(?:www\.)?imgur\.com/(?!(?:images|include|min|register|signin)(?:/|\?|$))" /-->
 
 
 	<securecookie host="^\.?imgur\.com" name=".+" />
 
 
-	<rule from="^http://(?:s\.)?imgur\.com/"
-		to="https://imgur.com/"/>
+	<rule from="^http://(s\.)?imgur\.com/"
+		to="https://$1imgur.com/"/>
 
 	<!--	This rule breaks the Imgur Uploader Firefox extension:
 
@@ -50,5 +65,8 @@
 
 	<rule from="^http://img\.imgur\.com/"
 		to="https://i.imgur.com/" />
+
+	<rule from="^http://store\.imgur\.com/"
+		to="https://imgur-store.myshopify.com/" />
 
 </ruleset>

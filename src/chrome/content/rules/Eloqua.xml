@@ -1,6 +1,8 @@
 <!--
 	For problematic rules, see Eloqua-mismatches.xml.
 
+	For other Oracle coverage, see Oracle.xml.
+
 
 	Other Eloqua rulesets:
 
@@ -14,6 +16,10 @@
 			- images.marketing.eloqua.com
 
 		- wildcard.en25.com.edgekey.net
+
+		- amda-p9fb4.client.shareholder.com
+
+			- investor.eloqua.com
 
 
 	Nonfunctional domains:
@@ -77,6 +83,9 @@
 
 	<securecookie host="^\.eloqua\.com$" name="^EL(?:OQUA|QSTATUS)$" />
 
+
+	<rule from="^http://investor\.eloqua\.com/common/"
+		to="https://investor.shareholder.com/common/" />
 
 	<rule from="^http://images\.marketing\.eloqua\.com/"
 		to="https://s33.t.eloqua.com/" />

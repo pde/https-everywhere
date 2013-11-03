@@ -1,3 +1,10 @@
+<!--
+	Observed subdomains:
+
+		- a
+		- p
+
+-->
 <ruleset name="rfihub.com">
 
 	<target host="*.rfihub.com" />

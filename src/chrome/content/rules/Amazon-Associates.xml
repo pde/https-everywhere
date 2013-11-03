@@ -2,6 +2,11 @@
 	For other Amazon coverage, see Amazon.xml.
 
 
+	CDN buckets:
+
+		- associates-amazon.s3.amazonaws.com
+
+
 	Nonfunctional domains:
 
 		- affiliate-blog.amazon.de	(hosted on Typepad)
@@ -15,11 +20,26 @@
 
 	amazonassociates.typepad.com
 
+	Fully covered domains:
+
+		- amazon-adsystem.com subdomains:
+
+			- aax-eu
+			- aax-us-east
+			- ir-na
+			- ps-us
+			- ws-na
+
+
+	ps-us.amazon-adsystem.com sets aps-trtmnt cookie
+	on whichever domain it is loaded from.
+
 -->
 <ruleset name="Amazon Associates">
 
 	<target host="affiliate-program.amazon.com" />
 	<target host="astore.amazon.com" />
+	<target host="pda-bes.amazon.com" />
 	<target host="rcm.amazon.com" />
 	<target host="rcm-images.amazon.com" />
 	<target host="sellercentral.amazon.com" />
@@ -42,7 +62,7 @@
 	<rule from="^http://ws\.amazon\.(ca|co\.jp|com|co\.uk|de|fr)/"
 		to="https://ws.amazon.$1/" />
 
-	<rule from="^http://(affiliate-program|astore|rcm|sellercentral)\.amazon\.com/"
+	<rule from="^http://(affiliate-program|astore|pda-bes|rcm|sellercentral)\.amazon\.com/"
 		to="https://$1.amazon.com/" />
 
 	<rule from="^https?://rcm-images\.amazon\.com/"
@@ -54,7 +74,7 @@
 	<rule from="^http://partnernet\.amazon\.de/"
 		to="https://partnernet.amazon.de/" />
 
-	<rule from="^http://(fls-na|s)\.amazon-adsystem\.com/"
+	<rule from="^http://(aax-eu|aax-us-east|fls-na|ir-na|ps-us|s|ws-na)\.amazon-adsystem\.com/"
 		to="https://$1.amazon-adsystem.com/" />
 
 	<!--	.co.jp doesn't exist.

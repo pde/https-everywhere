@@ -7,16 +7,23 @@
 
 	* Refused
 
+
+	Fully covered subdomains:
+
+		- mail
+		- packages
+		- wiki
+
 -->
 <ruleset name="Python.org (partial)">
 
-	<target host="wiki.python.org" />
+	<target host="*.python.org" />
 
 
 	<securecookie host="^wiki\.python\.org$" name=".+" />
 
 
-	<rule from="^http://wiki\.python\.org/"
-		to="https://wiki.python.org/" />
+	<rule from="^http://(mail|packages|wiki)\.python\.org/"
+		to="https://$1.python.org/" />
 
 </ruleset>

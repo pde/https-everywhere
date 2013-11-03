@@ -6,6 +6,10 @@ INFO=3;
 NOTE=4;
 WARN=5;
 
+// PREFERENCE BRANCHES
+PREFBRANCH_ROOT=0;
+PREFBRANCH_RULE_TOGGLE=1;
+
 //---------------
 
 https_domains = {};              // maps domain patterns (with at most one
@@ -179,6 +183,7 @@ function HTTPSEverywhere() {
   this.ApplicableList = ApplicableList;
   
   this.prefs = this.get_prefs();
+  this.rule_toggle_prefs = this.get_prefs(PREFBRANCH_RULE_TOGGLE);
   
   // We need to use observers instead of categories for FF3.0 for these:
   // https://developer.mozilla.org/en/Observer_Notifications
@@ -194,6 +199,7 @@ function HTTPSEverywhere() {
     this.obsService.addObserver(this, "profile-after-change", false);
     this.obsService.addObserver(this, "sessionstore-windows-restored", false);
   }
+  
   return;
 }
 
@@ -430,7 +436,7 @@ HTTPSEverywhere.prototype = {
       if (!(channel instanceof CI.nsIHttpChannel)) return;
       
       this.log(DBUG,"Got http-on-modify-request: "+channel.URI.spec);
-      var lst = this.getApplicableListForChannel(channel);
+      var lst = this.getApplicableListForChannel(channel); // null if no window is associated (ex: xhr)
       if (channel.URI.spec in https_everywhere_blacklist) {
         this.log(DBUG, "Avoiding blacklisted " + channel.URI.spec);
         if (lst) lst.breaking_rule(https_everywhere_blacklist[channel.URI.spec])
@@ -465,8 +471,6 @@ HTTPSEverywhere.prototype = {
           }
         }
       }
-    } else if (topic == "app-startup") {
-      this.log(DBUG,"Got app-startup");
     } else if (topic == "profile-before-change") {
       this.log(INFO, "Got profile-before-change");
       var catman = Components.classes["@mozilla.org/categorymanager;1"]
@@ -497,7 +501,9 @@ HTTPSEverywhere.prototype = {
             SERVICE_CTRID, false, true);
       }
     } else if (topic == "sessionstore-windows-restored") {
+      this.log(DBUG,"Got sessionstore-windows-restored");
       this.maybeShowObservatoryPopup();
+      this.maybeShowDevPopup();
     }
     return;
   },
@@ -522,6 +528,28 @@ HTTPSEverywhere.prototype = {
       ssl_observatory.registerProxyTestNotification(obs_popup_callback);
   },
 
+  maybeShowDevPopup: function() {
+    /*
+     * Users who installed 3.3.2 accidentally got upgraded to the
+     * dev branch. We need to push this code to a dev release so
+     * that they get a popup letting them know that they can switch
+     * back to the stable branch if they want.
+     */
+    var was_stable = true;
+    var shown = this.prefs.getBoolPref("dev_popup_shown");
+    try {
+      // this pref should exist only for people who used to be stable
+      // since getExperimentalFeatureCohort was never run in the
+      // development channel
+      this.prefs.getIntPref("experimental_feature_cohort");
+    } catch(e) {
+      was_stable = false;
+    }
+    if (was_stable && !shown) {
+      this.tab_opener("chrome://https-everywhere/content/dev-popup.xul");
+    }
+  },
+
   getExperimentalFeatureCohort: function() {
     // This variable is used for gradually turning on features for testing and
     // scalability purposes.  It is a random integer [0,N_COHORTS) generated
@@ -541,7 +569,7 @@ HTTPSEverywhere.prototype = {
   // nsIChannelEventSink implementation
   onChannelRedirect: function(oldChannel, newChannel, flags) {  
     const uri = newChannel.URI;
-    this.log(DBUG,"Got onChannelRedirect.");
+    this.log(DBUG,"Got onChannelRedirect to "+uri.spec);
     if (!(newChannel instanceof CI.nsIHttpChannel)) {
       this.log(DBUG, newChannel + " is not an instance of nsIHttpChannel");
       return;
@@ -596,33 +624,40 @@ HTTPSEverywhere.prototype = {
     return this.shouldLoad(aContentType, aContentLocation, aRequestOrigin, aContext, aMimeType, CP_SHOULDPROCESS);
   },
 
-  get_prefs: function() {
-      // get our preferences branch object
-      // FIXME: Ugly hack stolen from https
-      var branch_name = "extensions.https_everywhere.";
-      var o_prefs = false;
-      var o_branch = false;
-      // this function needs to be called from inside https_everywhereLog, so
-      // it needs to do its own logging...
-      var econsole = Components.classes["@mozilla.org/consoleservice;1"]
-          .getService(Components.interfaces.nsIConsoleService);
+  get_prefs: function(prefBranch) {
+    if(!prefBranch) prefBranch = PREFBRANCH_ROOT;
 
-      o_prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                          .getService(Components.interfaces.nsIPrefService);
+    // get our preferences branch object
+    // FIXME: Ugly hack stolen from https
+    var branch_name;
+    if(prefBranch == PREFBRANCH_RULE_TOGGLE)
+      branch_name = "extensions.https_everywhere.rule_toggle.";
+    else
+      branch_name = "extensions.https_everywhere.";
+    var o_prefs = false;
+    var o_branch = false;
+    // this function needs to be called from inside https_everywhereLog, so
+    // it needs to do its own logging...
+    var econsole = Components.classes["@mozilla.org/consoleservice;1"]
+      .getService(Components.interfaces.nsIConsoleService);
 
-      if (!o_prefs)
-      {
-          econsole.logStringMessage("HTTPS Everywhere: Failed to get preferences-service!");
-          return false;
-      }
+    o_prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                        .getService(Components.interfaces.nsIPrefService);
 
-      o_branch = o_prefs.getBranch(branch_name);
-      if (!o_branch)
-      {
-          econsole.logStringMessage("HTTPS Everywhere: Failed to get prefs branch!");
-          return false;
-      }
+    if (!o_prefs)
+    {
+      econsole.logStringMessage("HTTPS Everywhere: Failed to get preferences-service!");
+      return false;
+    }
 
+    o_branch = o_prefs.getBranch(branch_name);
+    if (!o_branch)
+    {
+      econsole.logStringMessage("HTTPS Everywhere: Failed to get prefs branch!");
+      return false;
+    }
+
+    if(prefBranch == PREFBRANCH_ROOT) {
       // make sure there's an entry for our log level
       try {
         o_branch.getIntPref(LLVAR);
@@ -630,8 +665,9 @@ HTTPSEverywhere.prototype = {
         econsole.logStringMessage("Creating new about:config https_everywhere.LogLevel variable");
         o_branch.setIntPref(LLVAR, WARN);
       }
+    }
 
-      return o_branch;
+    return o_branch;
   },
 
   /**
@@ -659,6 +695,16 @@ HTTPSEverywhere.prototype = {
       .getService(CI.nsIWindowMediator) 
       .getMostRecentWindow('navigator:browser')
       .open(uri,'', args );
+  },
+
+  tab_opener: function(uri) {
+    var gb = CC['@mozilla.org/appshell/window-mediator;1']
+      .getService(CI.nsIWindowMediator) 
+      .getMostRecentWindow('navigator:browser')
+      .gBrowser;
+    var tab = gb.addTab(uri);
+    gb.selectedTab = tab;
+    return tab;
   },
 
   toggleEnabledState: function() {
