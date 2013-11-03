@@ -32,7 +32,7 @@ var ssl_observatory = CC["@eff.org/ssl-observatory;1"]
                     .wrappedJSObject;
 
 
-if (!httpsEverywhere) { var httpsEverywhere = {}; };
+if (!httpsEverywhere) { var httpsEverywhere = {}; }
 /**
  * JS Object for reporting disabled rulesets.
  *

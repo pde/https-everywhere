@@ -240,7 +240,7 @@ function toggle_rule(rule_id) {
 	  .getService(CI.nsIWindowMediator)
 	  .getMostRecentWindow('navigator:browser');
   var torbutton_avail = ssl_observatory.proxy_test_successful;
-  HTTPSEverywhere.log(INFO, 'Proxy test returned: '+torbutton_avail)  
+  HTTPSEverywhere.log(INFO, 'Proxy test returned: '+torbutton_avail);  
   if (report && !rs.active) {
     if (!tor_report || torbutton_avail) {
       aWin.openDialog("chrome://https-everywhere/content/report-disable.xul", 
