@@ -229,13 +229,3 @@ httpsEverywhere.reportRule = {
   }
 };
      
-// set the title of the dialog window and the checkbox states
-window.addEventListener("load", function() {
-  var rr = httpsEverywhere.reportRule;
-  rr.setCheckbox("report_browser", "send-browser-box");
-  rr.setCheckbox("report_addon_version", "send-addon-version-box");
-  rr.setCheckbox("report_os", "send-os-box");
-  rr.set_radio();
-  rr.setFilenameText();
-}, false);
-
