@@ -6,12 +6,19 @@ pref("extensions.https_everywhere.globalEnabled",true);
 // when tor is enabled
 pref("extensions.https_everywhere.report_disabled_rules", true);
 pref("extensions.https_everywhere.report_disabled_rules_tor_only", false);
-pref("extensions.https_everywhere.report_host", "zyan.scripts.mit.edu");
+pref("extensions.https_everywhere.report_host", "zyan.scripts.mit.edu"); // change to httpse1.eff.org
 
 // optional system info to send along with the name of disabled rule
-pref("extensions.https_everywhere.report_browser", false);
-pref("extensions.https_everywhere.report_addon_version", true);
-pref("extensions.https_everywhere.report_os", false);
+pref("extensions.https_everywhere.report_os_and_browser", true); // used to be separate
+pref("extensions.https_everywhere.report_extensions", false);
+pref("extensions.https_everywhere.report_domain", true);
+pref("extensions.https_everywhere.report_full_url", false);
+
+// always show a popup asking for comments with bug reports?
+pref("extensions.https_everywhere.report_comments",false);
+
+// have we shown a popup asking for bug report prefs the first time a user disables a rule?
+pref("extensions.https_everywhere.report_popup_shown", false);
 
 // this is the HTTPS Everywhere preferences version (for migrations)
 pref("extensions.https_everywhere.prefs_version", 0);
