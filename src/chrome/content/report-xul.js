@@ -27,11 +27,6 @@ var HTTPSEverywhere = CC["@eff.org/https-everywhere;1"]
                       .getService(Components.interfaces.nsISupports)
                       .wrappedJSObject;
 
-var ssl_observatory = CC["@eff.org/ssl-observatory;1"]
-                    .getService(Components.interfaces.nsISupports)
-                    .wrappedJSObject;
-
-
 if (!httpsEverywhere) { var httpsEverywhere = {}; }
 /**
  * JS Object for reporting disabled rulesets.
@@ -62,7 +57,7 @@ httpsEverywhere.reportRule = {
     // get the OS and browser version (optional)
     // https://developer.mozilla.org/en-US/docs/Code_snippets/Miscellaneous#System_info
     var pref = httpsEverywhere.reportRule.prefs;
-    if (pref.getBoolPref("report_os")) {
+    if (pref.getBoolPref("report_os_and_browser")) {
       try {
         var osString = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULRuntime).OS;
       } catch (ex) {
@@ -71,8 +66,6 @@ httpsEverywhere.reportRule = {
                            .getService(CI.nsIHttpProtocolHandler).oscpu;
       }
       p.push("os="+osString);
-    }
-    if (pref.getBoolPref("report_browser")) {
       var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
       p.push("app_name="+appInfo.name); // ex: firefox
       p.push("app_version="+appInfo.version); // ex: 2.0.0.1
@@ -133,17 +126,12 @@ httpsEverywhere.reportRule = {
     reqParams.push("rulename="+rulename);
     reqParams.push("commit_id="+commit_id);
     reqParams.push("comment="+comment);
-    if (rr.prefs.getBoolPref("report_addon_version")) {
-      try {
-        rr.getSysInfoSync(reqParams);
-      } catch(e) {
-        HTTPSEverywhere.log(WARN, 'Error getting system info: '+e);
-      } finally {
-        rr.getSysInfoAsync(reqParams);
-      }
-    } else {
-      rr.getSysInfoSync(reqParams);
-      rr.finishRequest(reqParams);
+    try {
+      rr.getSysInfoSync(reqParams); 
+    } catch(e) {
+      HTTPSEverywhere.log(WARN, 'Error getting system info: '+e);
+    } finally {
+      rr.getSysInfoAsync(reqParams);
     }
   },
 
