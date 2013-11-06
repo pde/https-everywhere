@@ -177,40 +177,11 @@ httpsEverywhere.reportRule = {
     box.checked = current;
   },
 
-  showHelper: function() {
-    var helper_text = document.getElementById("helper-text");
-    helper_text.setAttribute("hidden", "false");
+  showElem: function(elem) {
+    document.getElementById(elem).setAttribute("hidden", "false");
   },
 
-  onDisableCheck: function() {
-    var rr = httpsEverywhere.reportRule;
-    rr.showHelper();
-    rr.prefs.setBoolPref("report_disabled_rules", false);
-  },
-
-  onTorCheck: function() {
-    var rr = httpsEverywhere.reportRule;
-    rr.showHelper();
-    rr.prefs.setBoolPref("report_disabled_rules", true);
-    rr.prefs.setBoolPref("report_disabled_rules_tor_only", true);
-  },
-
-  set_radio: function() {
-    // set radio buttons on window load according to prefs
-    var pref = httpsEverywhere.reportRule.prefs;
-    var elem;
-    var radiogroup = document.getElementById("report_group_disable");
-    radiogroup.selectedItem.setAttribute("selected", "false");
-    if (!pref.getBoolPref("report_disabled_rules")) {
-      elem = 'dont-ask';
-      document.getElementById(elem).setAttribute("selected", true);
-    } else if (pref.getBoolPref("report_disabled_rules_tor_only")){
-      elem = 'tor-ask';
-      document.getElementById(elem).setAttribute("selected", true);
-    }
-  },
-
-  toggleSysReport: function(setting) {
+  toggleReportSetting: function(setting) {
     var pref = httpsEverywhere.reportRule.prefs;
     var current = pref.getBoolPref(setting);
     pref.setBoolPref(setting, !current);
