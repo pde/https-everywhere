@@ -53,28 +53,71 @@ httpsEverywhere.reportRule = {
     rr.submitReport(rulename,id,comment);
   },
 
-  getSysInfoSync: function(p) {
-    // get the OS and browser version (optional)
+  getOSBrowser: function(p) {
     // https://developer.mozilla.org/en-US/docs/Code_snippets/Miscellaneous#System_info
-    var pref = httpsEverywhere.reportRule.prefs;
+    try {
+      var osString = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULRuntime).OS;
+    } catch (ex) {
+    // needed for Seamonkey 2.0
+      var osString = CC["@mozilla.org/network/protocol;1?name=http"]
+                         .getService(CI.nsIHttpProtocolHandler).oscpu;
+    }
+    p.push("os="+osString);
+    var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
+    p.push("app_name="+appInfo.name); // ex: firefox
+    p.push("app_version="+appInfo.version); // ex: 2.0.0.1
+  },
+
+  getDomain: function(p) {},
+
+  getFullUrl: function(p) {},
+
+  getExtensions: function(p) {},
+
+  getSysInfoSync: function(p) {
+    var rr = httpsEverywhere.reportRule;
+    var hlog = HTTPSEverywhere.log;
+    var pref = rr.prefs;
     if (pref.getBoolPref("report_os_and_browser")) {
       try {
-        var osString = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULRuntime).OS;
+        rr.getOSBrowser(p);
       } catch (ex) {
-      // needed for Seamonkey 2.0
-        var osString = CC["@mozilla.org/network/protocol;1?name=http"]
-                           .getService(CI.nsIHttpProtocolHandler).oscpu;
+        p.push("os=");
+        p.push("app_name=");
+        p.push("app_version=");
+        hlog(WARN, 'Failed to get OS and Browser for report due to: '+ex);
       }
-      p.push("os="+osString);
-      var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
-      p.push("app_name="+appInfo.name); // ex: firefox
-      p.push("app_version="+appInfo.version); // ex: 2.0.0.1
+    }
+    if (pref.getBoolPref("report_domain")) {
+      try {
+        rr.getDomain(p);
+      } catch (ex) {
+        p.push("domain=");
+        hlog(WARN, 'Failed to get domain for report due to: '+ex);
+      }
+    }
+    if (pref.getBoolPref("report_full_url")) {
+      try {
+        rr.getFullUrl(p);
+      } catch (ex) {
+        p.push("url=");
+        hlog(WARN, 'Failed to get full URL for report due to: '+ex);
+      }
+    }
+    if (pref.getBoolPref("report_extensions")) {
+      try {
+        rr.getExtensions(p);
+      } catch (ex) {
+        p.push("extensions=");
+        hlog(WARN, 'Failed to get extensions for report due to: '+ex);
+      }
     }
   },
 
   getSysInfoAsync: function(p) {
-    // this is a separate function, awkwardly, because getAddonByID is asynchronous.
-    // since we need to wait for it to return before the POST request can be submitted,
+    // Get the HTTPS Everywhere version. 
+    // Note that getAddonByID is asynchronous.
+    // Since we need to wait for it to return before the POST request can be submitted,
     // we give it finishRequest as a callback.
     var rr = httpsEverywhere.reportRule;
     try {
