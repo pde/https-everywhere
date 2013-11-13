@@ -31,6 +31,18 @@ if (!httpsEverywhere) { var httpsEverywhere = {}; }
 /**
  * JS Object for reporting disabled rulesets.
  *
+ * Produces and sends a POST request with the following parameters:
+ * rulename: name of rule
+ * commit_id: git commit ID
+ * comment (optional): user comment
+ * httpse: HTTPS Everywhere version
+ * extensions (optional): other extensions the user has enabled
+ * browser (optional): name of browser
+ * browser_version (optional): browser version
+ * os (optional): operating system
+ * domain (optional): domain of the current URL
+ * full_url (optional): full current URL
+ *
  * @author Yan Zhu <yan@mit.edu>
  */
 
@@ -64,15 +76,13 @@ httpsEverywhere.reportRule = {
     }
     p.push("os="+osString);
     var appInfo = CC["@mozilla.org/xre/app-info;1"].getService(CI.nsIXULAppInfo);
-    p.push("app_name="+appInfo.name); // ex: firefox
-    p.push("app_version="+appInfo.version); // ex: 2.0.0.1
+    p.push("browser="+appInfo.name); // ex: firefox
+    p.push("browser_version="+appInfo.version); // ex: 2.0.0.1
   },
 
   getDomain: function(p) {},
 
   getFullUrl: function(p) {},
-
-  getExtensions: function(p) {},
 
   getSysInfoSync: function(p) {
     var rr = httpsEverywhere.reportRule;
@@ -82,9 +92,6 @@ httpsEverywhere.reportRule = {
       try {
         rr.getOSBrowser(p);
       } catch (ex) {
-        p.push("os=");
-        p.push("app_name=");
-        p.push("app_version=");
         hlog(WARN, 'Failed to get OS and Browser for report due to: '+ex);
       }
     }
@@ -92,7 +99,6 @@ httpsEverywhere.reportRule = {
       try {
         rr.getDomain(p);
       } catch (ex) {
-        p.push("domain=");
         hlog(WARN, 'Failed to get domain for report due to: '+ex);
       }
     }
@@ -100,16 +106,7 @@ httpsEverywhere.reportRule = {
       try {
         rr.getFullUrl(p);
       } catch (ex) {
-        p.push("url=");
         hlog(WARN, 'Failed to get full URL for report due to: '+ex);
-      }
-    }
-    if (pref.getBoolPref("report_extensions")) {
-      try {
-        rr.getExtensions(p);
-      } catch (ex) {
-        p.push("extensions=");
-        hlog(WARN, 'Failed to get extensions for report due to: '+ex);
       }
     }
   },
@@ -124,8 +121,13 @@ httpsEverywhere.reportRule = {
       // Firefox 4 and later; Mozilla 2 and later
       Components.utils.import("resource://gre/modules/AddonManager.jsm");
       AddonManager.getAddonByID("https-everywhere@eff.org", function(addon) {
-        p.push("ext_version="+addon.version);
-        rr.finishRequest(p);
+        p.push("httpse="+addon.version);
+        if (rr.prefs.getBoolPref("report_extensions")) {
+          // Get the other addons, asynchronously, then finish the request
+          rr.getAddons(p);
+        } else {
+          rr.finishRequest(p);
+        }
       });
     } catch (ex) {
       try {
@@ -139,6 +141,25 @@ httpsEverywhere.reportRule = {
       } finally {
         rr.finishRequest(p);
       }
+    }
+  },
+
+  getAddons: function(p) {
+    var rr = httpsEverywhere.reportRule;
+    try {
+      AddonManager.getAddonsByTypes(["extension"], function(addons) {
+        var addonInfo = addons.filter(function(a) {
+          return !a.userDisabled;
+        }).map(function(a) {
+          return {name: a.name, version: a.version, id: a.id};
+        });
+        p.push("extensions="+JSON.stringify(addonInfo));
+        rr.finishRequest(p);
+      });
+    } catch (ex) {
+      // TODO: support for FF <4
+      HTTPSEverywhere.log(WARN, 'Failed to get other installed extensions due to: '+ex);
+      rr.finishRequest(p);
     }
   },
   
