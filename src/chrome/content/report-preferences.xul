@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://https-everywhere/locale/ssl-observatory.dtd">
+
+<dialog id="https-everywhere-prefs"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  buttons="accept"
+  buttonlabelaccept="&ssl-observatory.prefs.done;"
+  title="&https-everywhere.report.bug_prefs_title;"
+  width="800"
+  height="768"
+  persist="screenX screenY width height"
+  onload="observatory_prefs_init(document)"
+  ondialogaccept="observatory_prefs_accept()">
+  <script type="application/x-javascript" src="observatory-xul.js" />
+  <vbox flex="1">
+    <spacer flex="1" />
+    <label>&https-everywhere.report.explanation;</label>
+    <!--<separator class="thin" />
+    <label>&ssl-observatory.prefs.explanation2;</label>
+    <separator class="thin" />-->
+    <commandset>
+      <command id="toggle-enabled" oncommand="toggle_bugreports()" />
+      <command id="toggle-enabled" oncommand="toggle_bugreports()" />
+    </commandset>
+    <vbox>
+			<checkbox label="&https-everywhere.report.enable;" id="send-reports"
+								command="toggle-enabled" style="font-size:1.5em;"/>
+	<!--
+			<separator class="thin"/>
+				<radiogroup style="margin-left:3em;" id="ssl-obs-how">
+					<radio label="&ssl-observatory.prefs.anonymous;" 
+								 tooltiptext="&ssl-observatory.prefs.anonymous_tooltip;"
+								 alt_label="&ssl-observatory.prefs.anonymous_unavailable;"
+								 command="use-obs-anon" 
+								 class="ssl-obs-conf" id="ssl-obs-anon"/>
+					<radio label="&ssl-observatory.prefs.nonanon;" 
+								 tooltiptext="&ssl-observatory.prefs.nonanon_tooltip;"
+								 command="use-obs-nonanon"
+								 class="ssl-obs-conf" id="ssl-obs-nonanon"/>
+				</radiogroup>
+			<separator class="thin"/>-->
+			<!-- tooltips for bug report settings -->
+			<tooltip id="domain-tip" noautohide="true">
+				<label>&https-everywhere.report.domain_tooltip;</label>
+			</tooltip>
+			<tooltip id="addons-tip" noautohide="true">
+				<label>&https-everywhere.report.addons_tooltip;</label>
+			</tooltip>
+
+			<!-- bug report setting checkboxes -->
+
+			<checkbox label="&https-everywhere.report.domain;" id="send-domain"
+								tooltip="domain-tip" class="httpse-bugreport-conf"
+								command="toggle-send-domain"/>
+
+			<checkbox label="&https-everywhere.report.enable;" id="enable-bugreport"
+								class="httpse-bugreport-conf" command="toggle-reports"/>
+
+			<checkbox label="&https-everywhere.report.addons;" id="send-addons"
+								tooltip="addons-tip" class="httpse-bugreport-conf"
+								command="toggle-send-addons"/>
+
+    </vbox>
+
+    <spacer flex="5" />
+  </vbox>
+</dialog>
+

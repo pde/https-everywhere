@@ -50,6 +50,19 @@
 <!ENTITY https-everywhere.report.caption "Automatic bug reporting preferences">
 <!ENTITY https-everywhere.report.advanced_show "Advanced Options">
 <!ENTITY https-everywhere.report.advanced_hide "Hide Advanced Options">
+
+<!ENTITY https-everywhere.report.bug_prefs_title "Bug Reporting For HTTPS Everywhere">
+<!ENTITY https-everywhere.report.enable "Report which rulesets are enabled and disabled.">
+<!ENTITY https-everywhere.report.tor_only "Only submit using Tor for anonymity">
+<!ENTITY https-everywhere.report.domain "Send domain name.">
+<!ENTITY https-everywhere.report.domain_tooltip "Sends the domain name of the page on which you disabled/enabled rulesets">
+<!ENTITY https-everywhere.report.browser "Report OS and browser info">
+<!ENTITY https-everywhere.report.addons "Report other add-ons I have installed.">
+<!ENTITY https-everywhere.report.addons_tooltip "Addon information is valuable for debugging, but may be fingerprintable so we do not collect it by default">
+<!ENTITY https-everywhere.report.permission "Ask me for permission and comments every time">
+<!ENTITY https-everywhere.report.urls "Send full URLs">
+
+
 <!ENTITY https-everywhere.popup.title "HTTPS Everywhere 4.0development.11 notification">
 <!ENTITY https-everywhere.popup.paragraph1 "Oops. You were using the stable version of HTTPS Everywhere, but we might have accidentally upgraded you to the development version in our last release.">
 <!ENTITY https-everywhere.popup.paragraph2 "Would you like to go back to stable?">
