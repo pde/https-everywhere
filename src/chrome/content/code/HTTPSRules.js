@@ -611,7 +611,7 @@ const HTTPSRules = {
   // flow? Perhaps we can preload all targets from the DB into memory at startup
   // so we only hit the DB when we know there is something to be had.
   queryTarget: function(target) {
-    this.log(WARN, "Querying DB for " + target);
+    //this.log(WARN, "Querying DB for " + target);
     var output = [];
 
     var statement = this.queryForTarget.clone();
@@ -644,7 +644,7 @@ const HTTPSRules = {
         if (rulesets.length > 0) {
           for (var i = 0; i < rulesets.length; i++) {
             var ruleset = rulesets[i];
-            this.log(INFO, "Found ruleset in DB for " + host + ": " + ruleset);
+            //this.log(INFO, "Found ruleset in DB for " + host + ": " + ruleset);
             RuleWriter.readFromString(ruleset, this);
             this.setInsert(results, this.targets[target]);
           }
@@ -688,15 +688,15 @@ const HTTPSRules = {
     var domains_l = domains.length - 1; // The last entry in this thing is bogus
     var t1 = new Date().getTime();
     for (var n = 0; n < domains_l; n++) {
-      this.potentiallyApplicableRulesets(domains[n]);
+      this.potentiallyApplicableRulesets("www." + domains[n]);
     }
     var t2 = new Date().getTime();
     this.log(NOTE,domains_l + " calls to potentiallyApplicableRulesets took " + (t2 - t1) / 1000.0 + " seconds");
-    var t1 = new Date().getTime();
+    t1 = new Date().getTime();
     for (var n = 0; n < domains_l; n++) {
-      this.potentiallyApplicableRulesets(domains[n]);
+      this.potentiallyApplicableRulesets("www." + domains[n]);
     }
-    var t2 = new Date().getTime();
+    t2 = new Date().getTime();
     this.log(NOTE,domains_l + " subsequent calls to potentiallyApplicableRulesets took " + (t2 - t1) / 1000.0 + " seconds");
   },
 
