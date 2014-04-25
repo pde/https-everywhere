@@ -1,3 +1,4 @@
+
 function CtxCapturingListener(tracingChannel, captureObserver) {
   this.originalListener = tracingChannel.setNewListener(this);
   this.captureObserver = captureObserver;
@@ -92,6 +93,10 @@ ChannelReplacement.prototype = {
 //
 //    newChan.loadFlags = loadFlags | newChan.LOAD_REPLACE;
     
+    var HTTPSEverywhere = Cc["@eff.org/https-everywhere;1"]
+                            .getService(Components.interfaces.nsISupports)
+                            .wrappedJSObject;
+    HTTPSEverywhere.log(WARN,"ChannelReplacement going to "+ newURI);
     newChan.loadFlags = loadFlags;
 
     if (!(newChan instanceof Ci.nsIHttpChannel))
