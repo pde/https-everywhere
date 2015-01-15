@@ -64,7 +64,15 @@
 	<rule from="^http://trust\.turn\.com/(?=bootstrap/|includes/(?!trust\.css))"
 		to="https://a248.e.akamai.net/f/1505/4670/8/trust.turn.com/" />
 
-	<rule from="^http://(akamai|console|d|r)\.turn\.com/"
-		to="https://$1.turn.com/" />
+  <rule from="^https://turn\.com/" to="https://www.turn.com/" />
+
+  <!-- Turn.com uses injected HTTP headers to generate supercookies; arguably all
+       requests to that domain should be blocked, but certainly HTTP is unsafe
+       http://webpolicy.org/2015/01/14/turn-verizon-zombie-cookie/
+    -->
+	<rule from="^http://([^/:@\.]+\.)?turn\.com/" to="https://$1turn.com/"/>
+
+  <!-- emergency fallback: prevent redirect loop downgrades -->
+	<rule from="^http://([^/:@\.]+\.)?turn\.com/" to="https://127.0.0.1/"/>
 
 </ruleset>
