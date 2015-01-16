@@ -57,6 +57,7 @@ INCLUDE('Root-CAs');
 INCLUDE('sha256');
 INCLUDE('X509ChainWhitelist');
 INCLUDE('NSS');
+INCLUDE('md5');
 
 function SSLObservatory() {
   this.prefs = CC["@mozilla.org/preferences-service;1"]
@@ -105,6 +106,7 @@ function SSLObservatory() {
   // Register protocolproxyfilter
   this.pps = CC["@mozilla.org/network/protocol-proxy-service;1"]
                     .getService(CI.nsIProtocolProxyService);
+
 
   this.pps.registerFilter(this, 0);
   this.wrappedJSObject = this;
@@ -287,7 +289,40 @@ SSLObservatory.prototype = {
 
   ourFingerprint: function(cert) {
     // Calculate our custom fingerprint from an nsIX509Cert
-    return cert.sha1Fingerprint.replace(":", "", "g");
+
+    var len = new Object();
+    var derData = cert.getRawDER(len);
+    this.log(WARN, "derData is " + typeof(derData) + derData);
+    let result = "";
+    for (let j = 0, dataLength = derData.length; j < dataLength; ++j) 
+      result += String.fromCharCode(derData[j]);
+    this.log(WARN, "result is " + typeof(result) + result);
+    var der = btoa(result);
+    this.log(WARN, "type is " + typeof(der) + "  " + der);
+
+    var ch = CC["@mozilla.org/security/hash;1"].createInstance(CI.nsICryptoHash); 
+    ch.init(ch.MD5);
+    ch.update(derData,derData.length);
+    var h = ch.finish(true);
+    this.log(WARN, "We have" + typeof(h));
+
+    function toHexString(charCode)
+    {
+      return ("0" + charCode.toString(16)).slice(-2);
+    }
+
+// convert the binary hash data to a hex string.
+    var i;
+    var s = [toHexString(h.charCodeAt(i)) for (i in h)].join("");
+
+    //try {
+      if (s != cert.md5Fingerprint) {
+        this.log(WARN, "FAIL: " + s + "   " + cert.md5Fingerprint);
+      }
+    /*} catch (e) {
+      this.log(WARN, "Oh dear " + e);
+    }*/
+    return (cert.md5Fingerprint+cert.sha1Fingerprint).replace(":", "", "g");
   },
 
   observe: function(subject, topic, data) {
